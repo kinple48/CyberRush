@@ -11,8 +11,21 @@ class ACyberRushGameMode : public AGameModeBase
 {
 	GENERATED_BODY()
 
+protected:
+	// Called when the game starts or when spawned
+	virtual void BeginPlay() override;
+	
 public:
 	ACyberRushGameMode();
+
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<class AFloorTile> TileFactory;
+
+	FTransform NextSpawnPoint = FTransform::Identity;
+	
+	void AddFloorTile();
+
+	
 };
 
 

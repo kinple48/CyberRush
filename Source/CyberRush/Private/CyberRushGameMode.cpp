@@ -2,6 +2,7 @@
 
 #include "CyberRushGameMode.h"
 #include "CyberRushCharacter.h"
+#include "LJW/FloorTile.h"
 #include "UObject/ConstructorHelpers.h"
 
 ACyberRushGameMode::ACyberRushGameMode()
@@ -12,4 +13,19 @@ ACyberRushGameMode::ACyberRushGameMode()
 	{
 		DefaultPawnClass = PlayerPawnBPClass.Class;
 	}
+}
+
+void ACyberRushGameMode::BeginPlay()
+{
+	Super::BeginPlay();
+	for (int32 i = 0; i < 10; i++)
+	{
+		AddFloorTile();
+	}
+}
+
+void ACyberRushGameMode::AddFloorTile()
+{
+	auto FloorTile = GetWorld()->SpawnActor<AFloorTile>(TileFactory, NextSpawnPoint);
+	NextSpawnPoint = FloorTile->GetAttachTransform();
 }
