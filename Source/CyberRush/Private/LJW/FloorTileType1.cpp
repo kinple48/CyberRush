@@ -1,0 +1,38 @@
+// Fill out your copyright notice in the Description page of Project Settings.
+
+
+#include "LJW/FloorTileType1.h"
+
+#include "LJW/Item.h"
+
+void AFloorTileType1::BeginPlay()
+{
+	Super::BeginPlay();
+	SpawnCoin();
+}
+
+void AFloorTileType1::SpawnCoin()
+{
+	TArray<float> LaneYPositions = { -200.f, 0.f, 200.f };
+	
+	int32 LaneIndex = FMath::RandRange(0, LaneYPositions.Num() - 1);
+	
+	float CoinSpacing = 200.f;
+	int32 CoinCount = 5;
+
+	for (int32 i = 1; i < CoinCount; i++)
+	{
+		FVector SpawnLocation;
+		
+		SpawnLocation.X = GetActorLocation().X + (i * CoinSpacing);
+		SpawnLocation.Y = LaneYPositions[LaneIndex];
+		SpawnLocation.Z = GetActorLocation().Z + 100.f;
+		
+		FActorSpawnParameters SpawnParams;
+		SpawnParams.Owner = this;
+		SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+		
+		GetWorld()->SpawnActor<AItem>(ItemFactory, SpawnLocation, FRotator::ZeroRotator, SpawnParams);
+	}
+}
+

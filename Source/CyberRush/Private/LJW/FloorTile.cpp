@@ -2,8 +2,9 @@
 
 #include "Components/ArrowComponent.h"
 #include "Components/BoxComponent.h"
-#include "CyberRush/CyberRushCharacter.h"
-#include "CyberRush/CyberRushGameMode.h"
+#include "CyberRushCharacter.h"
+#include "CyberRushGameMode.h"
+#include "LJW/Item.h"
 
 AFloorTile::AFloorTile()
 {
@@ -38,6 +39,7 @@ AFloorTile::AFloorTile()
 	floor->SetRelativeScale3D(FVector(10.0f,10.0f,0.1f));
 	floor->SetRelativeLocation(FVector(500.0f,0.0f,0.0f));
 	floor->SetupAttachment(Scenecomp);
+	floor->SetCollisionResponseToChannel(ECC_GameTraceChannel1,ECR_Overlap);
 
 	Arrowcomp = CreateDefaultSubobject<UArrowComponent>(TEXT("Arrowcomp"));
 	Arrowcomp->SetRelativeLocation(FVector(1000.0f,0.0f,0.0f));
@@ -54,7 +56,7 @@ AFloorTile::AFloorTile()
 void AFloorTile::BeginPlay()
 {
 	Super::BeginPlay();
-	Boxcomp->OnComponentBeginOverlap.AddDynamic(this, &AFloorTile::OnBoxOverlap);
+	Boxcomp->OnComponentBeginOverlap.AddDynamic(this, &AFloorTile::OnBoxBeginOverlap);
 }
 
 // Called every frame
@@ -70,7 +72,7 @@ FTransform AFloorTile::GetAttachTransform()
 	return AttachTransform;
 }
 
-void AFloorTile::OnBoxOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+void AFloorTile::OnBoxBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
 	if (auto Player = Cast<ACyberRushCharacter>(OtherActor))
 	{

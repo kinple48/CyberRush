@@ -3,6 +3,7 @@
 #include "CyberRushGameMode.h"
 #include "CyberRushCharacter.h"
 #include "LJW/FloorTile.h"
+#include "LJW/FloorTileType1.h"
 #include "UObject/ConstructorHelpers.h"
 
 ACyberRushGameMode::ACyberRushGameMode()
