@@ -4,6 +4,8 @@
 #include "CyberRushCharacter.h"
 #include "LJW/FloorTile.h"
 #include "LJW/FloorTileType1.h"
+#include "LJW/MainHUD.h"
+#include "LJW/MainPlayerController.h"
 #include "UObject/ConstructorHelpers.h"
 
 ACyberRushGameMode::ACyberRushGameMode()
@@ -14,6 +16,9 @@ ACyberRushGameMode::ACyberRushGameMode()
 	{
 		DefaultPawnClass = PlayerPawnBPClass.Class;
 	}
+
+	PlayerControllerClass = AMainPlayerController::StaticClass();
+	HUDClass = AMainHUD::StaticClass();
 }
 
 void ACyberRushGameMode::BeginPlay()
