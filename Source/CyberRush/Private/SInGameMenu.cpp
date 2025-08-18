@@ -1,23 +1,29 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "LJW/STitleWidget.h"
-#include "Kismet/GameplayStatics.h"
-#include "LJW/TitleHUD.h"
+#include "SInGameMenu.h"
 
-void STitleWidget::Construct(const FArguments& InArgs)
+#include "AITestsCommon.h"
+#include "AITestsCommon.h"
+#include "HHS/RunnerPlayerBase.h"
+#include "Kismet/GameplayStatics.h"
+#include "LJW/MainHUD.h"
+
+
+void SInGameMenu::Construct(const FArguments& InArgs)
 {
 	bCanSupportFocus = true;
 	
 	OwningHUD = InArgs._OwningHUD;
+	OwnerCharacter = InArgs._OwnerCharacter;
 	
 	const FMargin ContentPadding = FMargin(500.f, 300.f);
 	const FMargin ButtonPadding = FMargin(10.f);
 	
-	const FText TitleText = FText::FromString("CyberRush");
-	const FText StartText = FText::FromString("Start Game");
+	const FText MenuText = FText::FromString("Menu");
+	const FText ResumeGameText = FText::FromString("Resume Game");
 	const FText OptionsText = FText::FromString("Options");
-	const FText QuitText = FText::FromString("Quit Game");
+	const FText QuitGameText = FText::FromString("Quit Game");
 
 	FSlateFontInfo ButtonTextStyle = FCoreStyle::Get().GetFontStyle("EmbossedText");
 	ButtonTextStyle.Size = 40.f;
@@ -33,7 +39,7 @@ void STitleWidget::Construct(const FArguments& InArgs)
 			.VAlign(VAlign_Fill)
 			[
 				SNew(SImage)
-				.ColorAndOpacity(FColor::Black)
+				.ColorAndOpacity(FLinearColor(0.f, 0.f, 0.f, 0.5f))
 			]
 			+ SOverlay::Slot()
 			.HAlign(HAlign_Fill)
@@ -45,7 +51,7 @@ void STitleWidget::Construct(const FArguments& InArgs)
 				[
 					SNew(STextBlock)
 					.Font(TitleTextStyle)
-					.Text(TitleText)
+					.Text(MenuText)
 					.Justification(ETextJustify::Center)
 				]
 
@@ -53,11 +59,11 @@ void STitleWidget::Construct(const FArguments& InArgs)
 				.Padding(ButtonPadding)
 				[
 					SNew(SButton)
-					.OnClicked(this, &STitleWidget::OnPlayClicked)
+					.OnClicked(this, &SInGameMenu::OnResumeGameClicked)
 					[
 						SNew(STextBlock)
 						.Font(ButtonTextStyle)
-						.Text(StartText)
+						.Text(ResumeGameText)
 						.Justification(ETextJustify::Center)
 					]
 				]
@@ -78,11 +84,11 @@ void STitleWidget::Construct(const FArguments& InArgs)
 				.Padding(ButtonPadding)
 				[
 					SNew(SButton)
-					.OnClicked(this, &STitleWidget::OnQuitClicked)
+					.OnClicked(this, &SInGameMenu::OnQuitGameClicked)
 					[
 						SNew(STextBlock)
 						.Font(ButtonTextStyle)
-						.Text(QuitText)
+						.Text(QuitGameText)
 						.Justification(ETextJustify::Center)
 					]
 				]
@@ -90,28 +96,30 @@ void STitleWidget::Construct(const FArguments& InArgs)
 		];
 }
 
-FReply STitleWidget::OnPlayClicked() const
+FReply SInGameMenu::OnResumeGameClicked() const
 {
-	if (OwningHUD.IsValid())
+	if (APlayerController* PC = OwningHUD->PlayerOwner)
 	{
-		OwningHUD->RemoveMenu();
-		if (APlayerController* PC = OwningHUD->PlayerOwner)
-		{
-			// 실제 게임 레벨로 이동
-			UGameplayStatics::OpenLevel(PC, FName("TestMap")); // GameLevel은 맵 이름
-		}
+		PC->SetPause(false);
 	}
 	
+	OwningHUD->RemoveMenu();
 	return FReply::Handled();
 }
 
-FReply STitleWidget::OnQuitClicked() const
+FReply SInGameMenu::OnOptionsClicked() const
+{
+	return FReply::Handled();
+}
+
+FReply SInGameMenu::OnQuitGameClicked() const
 {
 	if (OwningHUD.IsValid())
 	{
+		OwningHUD->QuitGame();
 		if (APlayerController* PC = OwningHUD->PlayerOwner)
 		{
-			PC->ConsoleCommand("quit");
+			UGameplayStatics::OpenLevel(PC, FName("LobbyMap")); // GameLevel은 맵 이름
 		}
 	}
 	return FReply::Handled();

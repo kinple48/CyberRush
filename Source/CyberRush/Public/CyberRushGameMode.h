@@ -19,7 +19,7 @@ public:
 	ACyberRushGameMode();
 
 	UPROPERTY(EditAnywhere)
-	TSubclassOf<class AFloorTile> TileFactory;
+	TArray<TSubclassOf<class AFloorTile>> TileClasses;
 
 	FTransform NextSpawnPoint = FTransform::Identity;
 	

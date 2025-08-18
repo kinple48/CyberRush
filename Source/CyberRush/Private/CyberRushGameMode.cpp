@@ -32,6 +32,14 @@ void ACyberRushGameMode::BeginPlay()
 
 void ACyberRushGameMode::AddFloorTile()
 {
-	auto FloorTile = GetWorld()->SpawnActor<AFloorTile>(TileFactory, NextSpawnPoint);
-	NextSpawnPoint = FloorTile->GetAttachTransform();
+	if (TileClasses.Num() == 0) return;
+
+	int32 RandomIndex = FMath::RandRange(0, TileClasses.Num() - 1);
+	TSubclassOf<AFloorTile> TileFactory = TileClasses[RandomIndex];
+
+	AFloorTile* FloorTile = GetWorld()->SpawnActor<AFloorTile>(TileFactory, NextSpawnPoint);
+	if (FloorTile)
+	{
+		NextSpawnPoint = FloorTile->GetAttachTransform();
+	}
 }
