@@ -32,7 +32,6 @@
 
 	//ConstructorHelpers::FClassFinder<UTPSPlayerAnimInstance> TempAnimInst(TEXT("/Script/Engine.AnimBlueprint'/Game/NYS/Blueprints/Anim/ABP_TPSPlayer.ABP_TPSPlayer_C'"));
 //
-	//// 만약 파일읽기를 성공했다면
 	//if( TempAnimInst.Succeeded() )
 	//{
 	//	GetMesh()->SetAnimInstanceClass(TempAnimInst.Class);
