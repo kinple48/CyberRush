@@ -7,6 +7,7 @@
 #include "EnhancedInputSubsystems.h"
 #include "Camera/CameraComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "HHS/PlayerCombatComponent.h"
 #include "HHS/PlayerMoveComponent.h"
 
  ARunnerPlayerBase::ARunnerPlayerBase()
@@ -28,6 +29,7 @@
 	RunnerCam->SetRelativeRotation(FRotator(-30.f, 0.f, 0.f));
 	
 	MoveComp = CreateDefaultSubobject<UPlayerMoveComponent>(TEXT("MoveComp"));
+ 	CombatComp = CreateDefaultSubobject<UPlayerCombatComponent>(TEXT("CombatComp"));
 
 
 	//ConstructorHelpers::FClassFinder<UTPSPlayerAnimInstance> TempAnimInst(TEXT("/Script/Engine.AnimBlueprint'/Game/NYS/Blueprints/Anim/ABP_TPSPlayer.ABP_TPSPlayer_C'"));
@@ -70,12 +72,16 @@ void ARunnerPlayerBase::SetupPlayerInputComponent(UInputComponent* PlayerInputCo
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
-	if(MoveComp)
-	{
-		if(UEnhancedInputComponent* EnhancedInput = Cast<UEnhancedInputComponent>(PlayerInputComponent))
-		{
-			MoveComp->SetupInputBinding(EnhancedInput);
-		}
-	}
+ 	if (UEnhancedInputComponent* EnhancedInput = Cast<UEnhancedInputComponent>(PlayerInputComponent))
+ 	{
+ 		if (MoveComp)
+ 		{
+ 			MoveComp->SetupInputBinding(EnhancedInput);
+ 		}
+ 		if (CombatComp)
+ 		{
+ 			CombatComp->SetupInputBinding(EnhancedInput);
+ 		}
+ 	}
 }
 

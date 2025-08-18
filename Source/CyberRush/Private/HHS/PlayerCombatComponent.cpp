@@ -3,32 +3,87 @@
 
 #include "HHS/PlayerCombatComponent.h"
 
-// Sets default values for this component's properties
+#include "EnhancedInputComponent.h"
+#include "Components/ArrowComponent.h"
+#include "Components/SphereComponent.h"
+#include "GameFramework/ProjectileMovementComponent.h"
+#include "HHS/Bullet.h"
+#include "HHS/RunnerPlayerBase.h"
+
 UPlayerCombatComponent::UPlayerCombatComponent()
 {
-	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
-	// off to improve performance if you don't need them.
 	PrimaryComponentTick.bCanEverTick = true;
 
-	// ...
+	FirePositionComp = CreateDefaultSubobject<UArrowComponent>(TEXT("FirePositionComp"));
+
 }
 
 
-// Called when the game starts
 void UPlayerCombatComponent::BeginPlay()
 {
 	Super::BeginPlay();
 
-	// ...
+    if (ARunnerPlayerBase* Player = Cast<ARunnerPlayerBase>(GetOwner()))
+	{
+		// Owner의 루트에 FirePositionComp 붙이기
+		FirePositionComp->AttachToComponent(Player->GetRootComponent(), FAttachmentTransformRules::KeepRelativeTransform);
+		FirePositionComp->SetRelativeLocationAndRotation(FVector(0.f, 0.f, 100.f), FRotator(90.f, 0.f, 0.f));
+	}
 	
+	for( int32 i = 0; i < MaxBulletCount; ++i )
+	{
+		FActorSpawnParameters params;
+		// 항상 스폰되게 한다.
+		params.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+		ABullet* bullet = GetWorld()->SpawnActor<ABullet>(BulletClass, params);
+		bullet->SetActive(false);
+		Magazine.Add(bullet);
+	}
 }
 
-
-// Called every frame
-void UPlayerCombatComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
+void UPlayerCombatComponent::SetupInputBinding(UEnhancedInputComponent* InputComponent)
 {
-	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
-
-	// ...
+	InputComponent->BindAction(IA_Fire, ETriggerEvent::Started, this, &UPlayerCombatComponent::Fire);
 }
 
+void UPlayerCombatComponent::Fire()
+{
+	//if (ARunnerPlayerBase* Player = Cast<ARunnerPlayerBase>(GetOwner()))
+	//{
+	//	FVector SpawnLoc = Player->GetActorLocation() + Player->GetActorForwardVector() * MuzzleOffset.X + FVector(0,0,MuzzleOffset.Z);
+	//	FRotator SpawnRot = Player->GetActorRotation();
+//
+	//	FActorSpawnParameters SpawnParams;
+	//	SpawnParams.Owner = Player;
+//
+	//	GetWorld()->SpawnActor<ABullet>(BulletClass, SpawnLoc, SpawnRot, SpawnParams);
+	//}
+	MakeBullet();
+}
+
+void UPlayerCombatComponent::MakeBullet()
+{
+	bool FindResult = false;
+	FTransform t = FirePositionComp->GetComponentTransform();
+
+	for( int i = 0; i < Magazine.Num(); ++i )
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Bullet #%d"), i);
+		
+		if (Magazine[i]->bIsActive == false)
+
+		{
+			FindResult = true;
+
+			Magazine[i]->SetActive(true);
+			Magazine[i]->SetActorLocationAndRotation(t.GetLocation(), t.GetRotation());
+
+			break;
+		}
+	}
+
+	if( FindResult == false )
+	{
+		UE_LOG(LogTemp, Warning, TEXT("활성화된 총알 없음"));
+	}
+}

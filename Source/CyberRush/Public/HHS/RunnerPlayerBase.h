@@ -31,8 +31,7 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	class UPlayerMoveComponent* MoveComp;
 
-	// ========== anim ==========
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Anim")
-	float ForwardSpeed;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Combat")
+	class UPlayerCombatComponent* CombatComp;
 
 };
