@@ -27,7 +27,17 @@ void UPlayerMoveComponent::BeginPlay()
 	// ...
 
 	OwningCharacter = Cast<ARunnerPlayerBase>(GetOwner());
-	
+
+	// 이동속도 조절
+	OwningCharacter->GetCharacterMovement()->MaxWalkSpeed = 800.f;
+
+	UCharacterMovementComponent* MoveComp = OwningCharacter->GetCharacterMovement();
+	if (MoveComp)
+	{
+		MoveComp->MaxWalkSpeed = 800.f;
+		MoveComp->JumpZVelocity = 600.f;    // 점프 높이
+		MoveComp->AirControl = 0.35f;
+	}
 }
 
 
@@ -36,6 +46,12 @@ void UPlayerMoveComponent::TickComponent(float DeltaTime, ELevelTick TickType, F
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
+	// 앞으로 자동 달리기
+	if (OwningCharacter)
+	{
+		OwningCharacter->AddMovementInput(OwningCharacter->GetActorForwardVector(), 1.0f);
+	}
+	
 	UpdateLanePosition(DeltaTime);
 }
 
@@ -65,12 +81,14 @@ void UPlayerMoveComponent::UpdateLanePosition(float DeltaTime)
 
 void UPlayerMoveComponent::Jump()
 {
-	if(!OwningCharacter) return;
+	if (!OwningCharacter) return;
 
-	// 이미 점프 중이면 무시
-	if(!OwningCharacter->GetCharacterMovement()->IsFalling())
+	// 이미 점프 중이 아닐 때만 점프
+	if (!OwningCharacter->GetCharacterMovement()->IsFalling())
 	{
 		OwningCharacter->Jump();
+		UE_LOG(LogTemp, Warning, TEXT("Jump"));
+
 	}
 }
 
