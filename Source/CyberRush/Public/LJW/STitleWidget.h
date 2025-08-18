@@ -14,7 +14,7 @@ public:
 
 	SLATE_BEGIN_ARGS(STitleWidget) {}
 		
-	SLATE_ARGUMENT(TWeakObjectPtr<class AMainHUD>, OwningHUD);
+	SLATE_ARGUMENT(TWeakObjectPtr<class ATitleHUD>, OwningHUD);
 
 	SLATE_END_ARGS()
 
@@ -23,7 +23,7 @@ public:
 	FReply OnPlayClicked() const;
 	FReply OnQuitClicked() const;
 	
-	TWeakObjectPtr<class AMainHUD> OwningHUD;
+	TWeakObjectPtr<class ATitleHUD> OwningHUD;
 
 	virtual bool SupportsKeyboardFocus() const override { return true; }
 };

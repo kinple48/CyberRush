@@ -2,53 +2,64 @@
 
 
 #include "LJW/MainHUD.h"
+
+#include "SInGameMenu.h"
 #include "LJW/SMainWidget.h"
 #include "LJW/STitleWidget.h"
 #include "Widgets/SWeakWidget.h"
 #include "Engine/Engine.h"
 #include "GameFramework/PlayerController.h"
+#include "HHS/RunnerPlayerBase.h"
 
 void AMainHUD::BeginPlay()
 {
 	Super::BeginPlay();
-	ShowMenu();
+	if (GEngine && GEngine->GameViewport)
+	{
+		MainWidget = SNew(SMainWidget).OwningHUD(this);
+		GEngine->GameViewport->AddViewportWidgetContent(SAssignNew(MainWidgetContainer,SWeakWidget).PossiblyNullContent(MainWidget.ToSharedRef()));
+	}
 }
 
 void AMainHUD::ShowMenu()
 {
-	if (GEngine && GEngine->GameViewport)
+	
+	InGameMenu = SNew(SInGameMenu).OwningHUD(this);
+	GEngine->GameViewport->AddViewportWidgetContent(SAssignNew(InGameMenuContainer,SWeakWidget).PossiblyNullContent(InGameMenu.ToSharedRef()));
+	
+	if (APlayerController* PC = GetOwningPlayerController())
 	{
-		TitleWidget = SNew(STitleWidget).OwningHUD(this);
-		GEngine->GameViewport->AddViewportWidgetContent(SAssignNew(TitleWidgetContainer,SWeakWidget).PossiblyNullContent(TitleWidget.ToSharedRef()));
-		
-		if (PlayerOwner)
-		{
-			PlayerOwner->bShowMouseCursor = true;
-			PlayerOwner->SetInputMode(FInputModeUIOnly());
-		}
+		PC->SetPause(true);
+		PC->SetInputMode(FInputModeGameAndUI());
+		PC->bShowMouseCursor = true;
 	}
 }
 
 void AMainHUD::RemoveMenu()
 {
-	if (GEngine && GEngine->GameViewport && TitleWidgetContainer.IsValid())
+	if (GEngine && GEngine->GameViewport && InGameMenuContainer.IsValid())
 	{
-		GEngine->GameViewport->RemoveViewportWidgetContent(TitleWidgetContainer.ToSharedRef());
+		GEngine->GameViewport->RemoveViewportWidgetContent(InGameMenuContainer.ToSharedRef());
 
 		if (PlayerOwner)
 		{
-			PlayerOwner->bShowMouseCursor = false;
-			PlayerOwner->SetInputMode(FInputModeGameOnly());
+			PlayerOwner->bShowMouseCursor = true;
+			PlayerOwner->SetInputMode(FInputModeGameAndUI());
 		}
 	}
 }
 
-void AMainHUD::OpenMainWidget()
+void AMainHUD::QuitGame()
 {
-	if (GEngine && GEngine->GameViewport)
+	if (GEngine && GEngine->GameViewport && MainWidgetContainer.IsValid())
 	{
-		MainWidget = SNew(SMainWidget).OwningHUD(this);
-		GEngine->GameViewport->AddViewportWidgetContent(SAssignNew(MainWidgetContainer,SWeakWidget).PossiblyNullContent(MainWidget.ToSharedRef()));
+		GEngine->GameViewport->RemoveViewportWidgetContent(MainWidgetContainer.ToSharedRef());
+
+		if (PlayerOwner)
+		{
+			PlayerOwner->bShowMouseCursor = true;
+			PlayerOwner->SetInputMode(FInputModeGameAndUI());
+		}
 	}
 }
 

@@ -4,28 +4,23 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/HUD.h"
-#include "MainHUD.generated.h"
+#include "TitleHUD.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class CYBERRUSH_API AMainHUD : public AHUD
+class CYBERRUSH_API ATitleHUD : public AHUD
 {
 	GENERATED_BODY()
-
 protected:
+	TSharedPtr<class STitleWidget> TitleWidget;
+	TSharedPtr<class SWidget> TitleWidgetContainer;
 
-	TSharedPtr<class SMainWidget> MainWidget;
-	TSharedPtr<class SWidget> MainWidgetContainer;
-
-	TSharedPtr<class SInGameMenu> InGameMenu;
-	TSharedPtr<class SWidget> InGameMenuContainer;
-	
 	virtual void BeginPlay() override;
 
 public:
 	void ShowMenu();
 	void RemoveMenu();
-	void QuitGame();
+	void OpenMainWidget();
 };
