@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
+#include "EnhancedInputComponent.h"
 #include "PlayerCombatComponent.generated.h"
 
 

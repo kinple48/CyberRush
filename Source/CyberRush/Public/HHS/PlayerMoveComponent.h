@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "RunnerPlayerBase.h"
 #include "Components/ActorComponent.h"
+#include "EnhancedInputComponent.h"
 #include "PlayerMoveComponent.generated.h"
 
 
