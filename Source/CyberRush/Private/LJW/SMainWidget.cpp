@@ -29,6 +29,7 @@ void SMainWidget::Construct(const FArguments& InArgs)
 					+SVerticalBox::Slot()
 					[
 						SNew(SButton)
+						.OnClicked(this,&SMainWidget::OnMenuClicked)
 						.HAlign(HAlign_Center)
 						.VAlign(VAlign_Center)
 						[
