@@ -16,11 +16,26 @@ class CYBERRUSH_API ATitleHUD : public AHUD
 protected:
 	TSharedPtr<class STitleWidget> TitleWidget;
 	TSharedPtr<class SWidget> TitleWidgetContainer;
+	
+	TSharedPtr<class SSelectWidget> SelectWidget;
+	TSharedPtr<class SWidget> SelectWidgetContainer;
+	
+	TSharedPtr<class SShopWidget> ShopWidget;
+	TSharedPtr<class SWidget> ShopWidgetContainer;
+	
+	TSharedPtr<class SGearUpWidget> GearUpWidget;
+	TSharedPtr<class SWidget> GearUpWidgetContainer;
 
+	
 	virtual void BeginPlay() override;
 
 public:
 	void ShowMenu();
 	void RemoveMenu();
-	void OpenMainWidget();
+	void OpenSelectWidget();
+	void RemoveSelectWidget();
+	void OpenShopWidget();
+	void RemoveShopWidget();
+	void OpenGearUpWidget();
+	void RemoveGearUpWidget();
 };

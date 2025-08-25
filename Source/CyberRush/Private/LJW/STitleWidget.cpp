@@ -95,11 +95,7 @@ FReply STitleWidget::OnPlayClicked() const
 	if (OwningHUD.IsValid())
 	{
 		OwningHUD->RemoveMenu();
-		if (APlayerController* PC = OwningHUD->PlayerOwner)
-		{
-			// 실제 게임 레벨로 이동
-			UGameplayStatics::OpenLevel(PC, FName("TestMap")); // GameLevel은 맵 이름
-		}
+		OwningHUD->OpenSelectWidget();
 	}
 	
 	return FReply::Handled();
