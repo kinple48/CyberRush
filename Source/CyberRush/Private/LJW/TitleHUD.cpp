@@ -13,6 +13,15 @@
 void ATitleHUD::BeginPlay()
 {
 	Super::BeginPlay();
+	UMaterialInterface* BaseMat = LoadObject<UMaterialInterface>(
+		nullptr,
+		TEXT("/Game/LJW/UI/M_CharacterPreview_UI.M_CharacterPreview_UI")
+	);
+
+	if (BaseMat)
+	{
+		GearUpMaterialInstance = UMaterialInstanceDynamic::Create(BaseMat, this); // Outer = HUD
+	}
 	ShowMenu();
 }
 
@@ -86,8 +95,8 @@ void ATitleHUD::OpenGearUpWidget()
 {
 	if (GEngine && GEngine->GameViewport)
 	{
-		GearUpWidget = SNew(SGearUpWidget).OwningHUD(this);
-		GEngine->GameViewport->AddViewportWidgetContent(SAssignNew(SelectWidgetContainer,SWeakWidget).PossiblyNullContent(SelectWidget.ToSharedRef()));
+		GearUpWidget = SNew(SGearUpWidget).OwningHUD(this).MaterialInstance(GearUpMaterialInstance);;
+		GEngine->GameViewport->AddViewportWidgetContent(SAssignNew(GearUpWidgetContainer,SWeakWidget).PossiblyNullContent(GearUpWidget.ToSharedRef()));
 	}
 }
 

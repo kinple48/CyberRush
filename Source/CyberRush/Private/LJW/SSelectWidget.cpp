@@ -67,6 +67,7 @@ void SSelectWidget::Construct(const FArguments& InArgs)
 				.Padding(ButtonPadding)
 				[
 					SNew(SButton)
+					.OnClicked(this, &SSelectWidget::OnGearUpClicked)
 					[
 						SNew(STextBlock)
 						.Font(ButtonTextStyle)
@@ -107,7 +108,13 @@ FReply SSelectWidget::OnPlayClicked() const
 
 FReply SSelectWidget::OnGearUpClicked() const
 {
-	
+	if (OwningHUD.IsValid())
+	{
+		OwningHUD->RemoveSelectWidget();
+		UE_LOG(LogTemp, Warning, TEXT("close widget"));
+		OwningHUD->OpenGearUpWidget();
+		UE_LOG(LogTemp, Warning, TEXT("open widget"));
+	}
 	return FReply::Handled();
 }
 

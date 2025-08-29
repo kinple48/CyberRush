@@ -26,6 +26,8 @@ protected:
 	TSharedPtr<class SGearUpWidget> GearUpWidget;
 	TSharedPtr<class SWidget> GearUpWidgetContainer;
 
+	UPROPERTY()
+	UMaterialInstanceDynamic* GearUpMaterialInstance;
 	
 	virtual void BeginPlay() override;
 
