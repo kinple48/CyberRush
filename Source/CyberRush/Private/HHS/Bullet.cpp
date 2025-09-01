@@ -17,7 +17,7 @@ ABullet::ABullet()
 
 	BulletMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("BulletMesh"));
 	BulletMesh->SetupAttachment(CollisionComp);
-	BulletMesh->SetRelativeScale3D(FVector(0.2f)); // 작게 조정
+	//BulletMesh->SetRelativeScale3D(FVector(0.2f)); // 작게 조정
 	
 	BulletMovement = CreateDefaultSubobject<UProjectileMovementComponent>(TEXT("ProjectileComp"));
 	BulletMovement->InitialSpeed = 2000.f;

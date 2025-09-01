@@ -33,11 +33,12 @@
 
 
  	GunMeshComp = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("GunMeshComp"));
-	GunMeshComp->SetupAttachment(GetMesh(), TEXT("WeaponSocket"));
+	GunMeshComp->SetupAttachment(GetMesh(), TEXT("ik_hand_rSocket"));
  	ConstructorHelpers::FObjectFinder<USkeletalMesh> TmpGun(TEXT("/Script/Engine.SkeletalMesh'/Game/Scifi_Arsenal_Vol2/Skeletal_Meshes/Sci-fi_Pistol_01/SK_Sci-fi_Pistol_01_NoIronsight.SK_Sci-fi_Pistol_01_NoIronsight'"));
  	if (TmpGun.Succeeded())
  	{
  		GunMeshComp->SetSkeletalMesh(TmpGun.Object);
+ 		GunMeshComp->SetRelativeLocationAndRotation(FVector(-6.705495f, -0.403527f, 2.557798f), FRotator(0.625342f, -38.782035f, 187.405683f));
 	}
  	
 	//ConstructorHelpers::FClassFinder<UTPSPlayerAnimInstance> TempAnimInst(TEXT("/Script/Engine.AnimBlueprint'/Game/NYS/Blueprints/Anim/ABP_TPSPlayer.ABP_TPSPlayer_C'"));
