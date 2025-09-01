@@ -46,9 +46,6 @@ void UEnemyFSM::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompon
 	case EEnemyState::Move:
 		MoveState();
 		break;
-	case EEnemyState::Attack:
-		AttackState();
-		break;
 	case EEnemyState::Damage:
 		DamageState();
 		break;
@@ -74,32 +71,9 @@ void UEnemyFSM::MoveState()
 {
 	if (!target || !me) return;
 	
-
 	FVector Destination = target->GetActorLocation();
 	FVector Dir = Destination - me->GetActorLocation();
 	me->AddMovementInput(Dir);
-	if (Dir.Size() <= attackRange)
-	{
-		mState = EEnemyState::Attack;
-		Anim->AnimState = mState;
-		CurrentTime = attackDelayTime;
-	}
-}
-
-void UEnemyFSM::AttackState()
-{
-	CurrentTime += GetWorld()->DeltaTimeSeconds;
-	if (CurrentTime >= attackDelayTime)
-	{
-		CurrentTime = 0.0f;
-	}
-	float distance = FVector::Distance(target->GetActorLocation(), me->GetActorLocation());
-
-	if (distance > attackRange)
-	{
-		mState = EEnemyState::Move;
-		Anim->AnimState = mState;
-	}
 }
 
 void UEnemyFSM::DamageState()

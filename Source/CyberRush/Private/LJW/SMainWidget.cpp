@@ -2,6 +2,11 @@
 
 
 #include "LJW/SMainWidget.h"
+
+#include "AITestsCommon.h"
+#include "AITestsCommon.h"
+#include "CyberRushGameMode.h"
+#include "Kismet/GameplayStatics.h"
 #include "LJW/MainHUD.h"
 
 void SMainWidget::Construct(const FArguments& InArgs)
@@ -16,6 +21,15 @@ void SMainWidget::Construct(const FArguments& InArgs)
 	ChildSlot
 		[
 			SNew(SOverlay)
+			+ SOverlay::Slot()
+			.HAlign(HAlign_Center)
+			.VAlign(VAlign_Top)
+			.Padding(50.f)
+			[
+				SNew(STextBlock)
+				.Font(ButtonTextStyle)
+				.Text(this, &SMainWidget::GetPointText)
+			]
 			+ SOverlay::Slot()
 			.HAlign(HAlign_Right)
 			.VAlign(VAlign_Top)
@@ -48,4 +62,20 @@ FReply SMainWidget::OnMenuClicked() const
 {
 	OwningHUD->ShowMenu();
 	return FReply::Handled();
+}
+
+FText SMainWidget::GetPointText() const
+{
+	AGameModeBase* GameModeBase = UGameplayStatics::GetGameMode(OwningHUD.Get());
+	if (GameModeBase)
+	{
+		if (ACyberRushGameMode* MyGameMode = Cast<ACyberRushGameMode>(GameModeBase))
+		{
+			FFormatNamedArguments Args;
+			Args.Add(TEXT("CurrentPoints"), FText::AsNumber(MyGameMode->CurrentScore));
+			return FText::Format(FText::FromString(TEXT("Point : {CurrentPoints}")), Args);
+		}
+	}
+	
+	return FText::FromString(TEXT("Point : 0"));
 }

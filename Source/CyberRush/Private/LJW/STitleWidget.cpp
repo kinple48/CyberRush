@@ -17,7 +17,6 @@ void STitleWidget::Construct(const FArguments& InArgs)
 	const FText TitleText = FText::FromString("CyberRush");
 	const FText StartText = FText::FromString("Start Game");
 	const FText OptionsText = FText::FromString("Options");
-	const FText QuitText = FText::FromString("Quit Game");
 
 	FSlateFontInfo ButtonTextStyle = FCoreStyle::Get().GetFontStyle("EmbossedText");
 	ButtonTextStyle.Size = 40.f;
@@ -73,19 +72,6 @@ void STitleWidget::Construct(const FArguments& InArgs)
 						.Justification(ETextJustify::Center)
 					]
 				]
-
-				+SVerticalBox::Slot()
-				.Padding(ButtonPadding)
-				[
-					SNew(SButton)
-					.OnClicked(this, &STitleWidget::OnQuitClicked)
-					[
-						SNew(STextBlock)
-						.Font(ButtonTextStyle)
-						.Text(QuitText)
-						.Justification(ETextJustify::Center)
-					]
-				]
 			]
 		];
 }
@@ -101,17 +87,5 @@ FReply STitleWidget::OnPlayClicked() const
 		}
 	}
 	
-	return FReply::Handled();
-}
-
-FReply STitleWidget::OnQuitClicked() const
-{
-	if (OwningHUD.IsValid())
-	{
-		if (APlayerController* PC = OwningHUD->PlayerOwner)
-		{
-			PC->ConsoleCommand("quit");
-		}
-	}
 	return FReply::Handled();
 }

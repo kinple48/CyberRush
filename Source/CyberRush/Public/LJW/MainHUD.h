@@ -21,6 +21,9 @@ protected:
 
 	TSharedPtr<class SInGameMenu> InGameMenu;
 	TSharedPtr<class SWidget> InGameMenuContainer;
+
+	TSharedPtr<class SGameOverWidget> GameOverWidget;
+	TSharedPtr<class SWidget> GameOverWidgetContainer;
 	
 	virtual void BeginPlay() override;
 
@@ -28,4 +31,6 @@ public:
 	void ShowMenu();
 	void RemoveMenu();
 	void QuitGame();
+	void ShowGameOverUI();
+	void RemoveGameOverUI();
 };

@@ -3,6 +3,7 @@
 
 #include "LJW/EnemyBase.h"
 
+#include "CyberRushGameMode.h"
 #include "Components/SphereComponent.h"
 #include "HHS/RunnerPlayerBase.h"
 #include "Kismet/GameplayStatics.h"
@@ -43,6 +44,11 @@ void AEnemyBase::OnAttackRangeBeginOverlap(UPrimitiveComponent* OverlappedCompon
 		UGameplayStatics::PlaySound2D(GetWorld(),ExplosionSound);
 		UGameplayStatics::SpawnEmitterAtLocation(GetWorld(),ExplosionVFX,GetActorLocation(), FRotator::ZeroRotator, EmitterScale, true);
 		Destroy();
+		if (ACyberRushGameMode* MyGameMode = Cast<ACyberRushGameMode>(UGameplayStatics::GetGameMode(GetWorld())))
+		{
+			MyGameMode->PlayerDied(player->GetController());
+		}
+		//player->Destroy();
 	}
 }
 

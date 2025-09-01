@@ -5,9 +5,6 @@
 #include "SlateBasics.h"
 #include "SlateExtras.h"
 
-/**
- * 
- */
 class STitleWidget : public SCompoundWidget
 {
 public:
@@ -21,7 +18,6 @@ public:
 	void Construct(const FArguments& InArgs);
 
 	FReply OnPlayClicked() const;
-	FReply OnQuitClicked() const;
 	
 	TWeakObjectPtr<class ATitleHUD> OwningHUD;
 
