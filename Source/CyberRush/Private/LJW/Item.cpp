@@ -7,6 +7,7 @@
 #include "Components/BoxComponent.h"
 #include "GameFramework/RotatingMovementComponent.h"
 #include "HHS/RunnerPlayerBase.h"
+#include "Kismet/GameplayStatics.h"
 #include "LJW/FloorTile.h"
 
 // Sets default values
@@ -55,6 +56,7 @@ void AItem::OnItemBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor*
 {
 	if (auto Player = Cast<ARunnerPlayerBase>(OtherActor))
 	{
+		UGameplayStatics::PlaySound2D(GetWorld(),ItemSound);
 		Destroy();
 	}
 }

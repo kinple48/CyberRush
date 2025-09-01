@@ -19,6 +19,13 @@ void AMainHUD::BeginPlay()
 		MainWidget = SNew(SMainWidget).OwningHUD(this);
 		GEngine->GameViewport->AddViewportWidgetContent(SAssignNew(MainWidgetContainer,SWeakWidget).PossiblyNullContent(MainWidget.ToSharedRef()));
 	}
+
+	if (APlayerController* PC = GetOwningPlayerController())
+	{
+		PC->SetInputMode(FInputModeGameAndUI());
+		PC->bShowMouseCursor = true;
+	}
+	FSlateApplication::Get().SetUserFocusToGameViewport(0);
 }
 
 void AMainHUD::ShowMenu()

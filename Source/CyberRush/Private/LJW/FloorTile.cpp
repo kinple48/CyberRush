@@ -76,7 +76,6 @@ FTransform AFloorTile::GetAttachTransform()
 void AFloorTile::OnBoxBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
 	if (auto Player = Cast<ARunnerPlayerBase>(OtherActor))
-	//if (auto Player = Cast <ACyberRushCharacter>(OtherActor))
 	{
 		if (auto* GM = GetWorld()->GetAuthGameMode<ACyberRushGameMode>())
 		{
