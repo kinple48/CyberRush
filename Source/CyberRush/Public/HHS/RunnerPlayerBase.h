@@ -34,4 +34,16 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Combat")
 	class UPlayerCombatComponent* CombatComp;
 
+	UPROPERTY(EditDefaultsOnly)
+	class USkeletalMeshComponent* GunMeshComp;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category=HP)
+	float MaxHP = 1.f;
+
+	UPROPERTY(BlueprintReadOnly, Category=HP)
+	float HP = MaxHP;
+
+	void DamageProcess();
+
+	bool bIsDead = false;
 };

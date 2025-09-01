@@ -22,12 +22,14 @@ UPlayerCombatComponent::UPlayerCombatComponent()
 void UPlayerCombatComponent::BeginPlay()
 {
 	Super::BeginPlay();
-
-    if (ARunnerPlayerBase* Player = Cast<ARunnerPlayerBase>(GetOwner()))
+	
+	if (ARunnerPlayerBase* Player = Cast<ARunnerPlayerBase>(GetOwner()))
 	{
-		// Owner의 루트에 FirePositionComp 붙이기
-		FirePositionComp->AttachToComponent(Player->GetRootComponent(), FAttachmentTransformRules::KeepRelativeTransform);
-		FirePositionComp->SetRelativeLocationAndRotation(FVector(0.f, 0.f, 100.f), FRotator(90.f, 0.f, 0.f));
+		if (Player->GunMeshComp)
+		{
+			// 소켓에 붙이기
+			FirePositionComp->AttachToComponent(Player->GunMeshComp, FAttachmentTransformRules::SnapToTargetNotIncludingScale, TEXT("MuzzleSocket"));
+		}
 	}
 	
 	for( int32 i = 0; i < MaxBulletCount; ++i )
