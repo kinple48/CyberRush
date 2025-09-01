@@ -25,7 +25,10 @@ public:
 	
 	void AddFloorTile();
 
-	
+	void AddScore(int32 Point);
+
+private:
+	int32 CurrentScore = 0;
 };
 
 

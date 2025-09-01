@@ -95,7 +95,10 @@ FReply STitleWidget::OnPlayClicked() const
 	if (OwningHUD.IsValid())
 	{
 		OwningHUD->RemoveMenu();
-		OwningHUD->OpenSelectWidget();
+		if (APlayerController* PC = OwningHUD->PlayerOwner)
+		{
+			UGameplayStatics::OpenLevel(PC, FName("TestMap"));
+		}
 	}
 	
 	return FReply::Handled();
