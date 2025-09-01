@@ -14,7 +14,7 @@
 {
 	PrimaryActorTick.bCanEverTick = true;
 
-	ConstructorHelpers::FObjectFinder<USkeletalMesh> TempMesh(TEXT("/Script/Engine.SkeletalMesh'/Game/Characters/Mannequins/Meshes/SKM_Quinn.SKM_Quinn'"));
+	ConstructorHelpers::FObjectFinder<USkeletalMesh> TempMesh(TEXT("/Script/Engine.SkeletalMesh'/Game/IdaFaber/Meshes/Girl/SK_CYBER_SF_F_01.SK_CYBER_SF_F_01'"));
 
 	if (TempMesh.Succeeded())
 	{
@@ -32,6 +32,14 @@
  	CombatComp = CreateDefaultSubobject<UPlayerCombatComponent>(TEXT("CombatComp"));
 
 
+ 	GunMeshComp = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("GunMeshComp"));
+	GunMeshComp->SetupAttachment(GetMesh(), TEXT("WeaponSocket"));
+ 	ConstructorHelpers::FObjectFinder<USkeletalMesh> TmpGun(TEXT("/Script/Engine.SkeletalMesh'/Game/Scifi_Arsenal_Vol2/Skeletal_Meshes/Sci-fi_Pistol_01/SK_Sci-fi_Pistol_01_NoIronsight.SK_Sci-fi_Pistol_01_NoIronsight'"));
+ 	if (TmpGun.Succeeded())
+ 	{
+ 		GunMeshComp->SetSkeletalMesh(TmpGun.Object);
+	}
+ 	
 	//ConstructorHelpers::FClassFinder<UTPSPlayerAnimInstance> TempAnimInst(TEXT("/Script/Engine.AnimBlueprint'/Game/NYS/Blueprints/Anim/ABP_TPSPlayer.ABP_TPSPlayer_C'"));
 //
 	//if( TempAnimInst.Succeeded() )
@@ -85,3 +93,10 @@ void ARunnerPlayerBase::SetupPlayerInputComponent(UInputComponent* PlayerInputCo
  	}
 }
 
+void ARunnerPlayerBase::DamageProcess()
+{
+	//--HP;
+
+ 	if (HP <= 0)
+ 		bIsDead = true;
+}
