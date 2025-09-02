@@ -92,13 +92,16 @@ void UEnemyFSM::DieState()
 {
 }
 
-void UEnemyFSM::OnDamageProcess()
+void UEnemyFSM::OnDamageProcess(int32 Damage)
 {
-	hp--;
+	hp -= Damage;
 
 	if (hp > 0)
 	{
 		mState = EEnemyState::Damage;
+		int32 randValue = FMath::RandRange(0,1);
+		FString sectionName = FString::Printf(TEXT("Damage %d"), randValue);
+		me->PlayAnimMontage(Anim->EnemyMontage,1.f,FName(*sectionName));
 	}
 	else
 	{

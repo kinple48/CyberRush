@@ -47,16 +47,16 @@ public:
 	float CurrentTime = 0.0f;
 	
 	UPROPERTY(EditAnywhere, Category = FSM)
-	float damageDelayTime = 2.f;
+	float damageDelayTime = 1.f;
 	
 	void IdleState();
 	void MoveState();
 	void DamageState();
 	void DieState();
 
-	void OnDamageProcess();
+	void OnDamageProcess(int32 Damage);
 
-	int32 hp = 3;
+	int32 hp = 2;
 
 	UPROPERTY()
 	class UEnemyAnim* Anim;

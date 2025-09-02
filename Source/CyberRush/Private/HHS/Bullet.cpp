@@ -7,6 +7,7 @@
 #include "Components/SphereComponent.h"
 #include "GameFramework/ProjectileMovementComponent.h"
 #include "LJW/EnemyBase.h"
+#include "LJW/EnemyFSM.h"
 
 ABullet::ABullet()
 {
@@ -48,10 +49,13 @@ void ABullet::OnOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherA
 		{
 			GameMode->AddScore(ScoreOnHit);
 		}
-		Enemy->Destroy();
+		
+		UEnemyFSM* enemyFSM = Enemy->FindComponentByClass<UEnemyFSM>();
+		if (enemyFSM)
+		{
+			enemyFSM->OnDamageProcess(1);
+		}
 		Destroy();
-		
-		
 	}
 }
 
