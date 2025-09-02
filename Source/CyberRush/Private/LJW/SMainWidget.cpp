@@ -2,9 +2,6 @@
 
 
 #include "LJW/SMainWidget.h"
-
-#include "AITestsCommon.h"
-#include "AITestsCommon.h"
 #include "CyberRushGameMode.h"
 #include "Kismet/GameplayStatics.h"
 #include "LJW/MainHUD.h"
