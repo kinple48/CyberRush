@@ -43,4 +43,7 @@ public:
 
 	UPROPERTY(EditAnywhere)
 	class USoundBase* ItemSound;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Runner|Score")
+	int32 ScoreItem = 100;
 };

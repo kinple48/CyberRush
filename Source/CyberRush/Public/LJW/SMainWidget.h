@@ -21,4 +21,7 @@ public:
 	TWeakObjectPtr<class AMainHUD> OwningHUD;
 
 	virtual bool SupportsKeyboardFocus() const override { return true; }
+
+private:
+	FText GetPointText() const;
 };

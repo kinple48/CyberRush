@@ -3,6 +3,7 @@
 
 #include "HHS/PlayerMoveComponent.h"
 
+#include "CyberRushGameMode.h"
 #include "EnhancedInputComponent.h"
 #include "HHS/RunnerPlayerBase.h"
 
@@ -31,6 +32,18 @@ void UPlayerMoveComponent::BeginPlay()
 		MoveComp->MaxWalkSpeed = 800.f;
 		MoveComp->JumpZVelocity = 600.f;    // 점프 높이
 		MoveComp->AirControl = 0.35f;
+	}
+
+	GameModeRef = Cast<ACyberRushGameMode>(GetWorld()->GetAuthGameMode());
+	
+	if (GameModeRef)
+	{
+		GetWorld()->GetTimerManager().SetTimer(
+			ScoreTimerHandle, 
+			this, 
+			&UPlayerMoveComponent::AddScoreOverTime, 
+			ScoreInterval, 
+			true);
 	}
 }
 
@@ -107,5 +120,18 @@ void UPlayerMoveComponent::SetupInputBinding(UEnhancedInputComponent* InputCompo
 	//InputComponent->BindAction(IA_Slide, ETriggerEvent::Started, this, &UPlayerMoveComponent::SlideStart);
 	//InputComponent->BindAction(IA_Slide, ETriggerEvent::Completed, this, &UPlayerMoveComponent::SlideEnd);
 
+}
+
+void UPlayerMoveComponent::AddScoreOverTime()
+{
+	if (GameModeRef && OwningCharacter && !OwningCharacter->bIsDead)
+	{
+		GameModeRef->AddScore(ScorePerInterval);
+	}
+	
+	else if(OwningCharacter && OwningCharacter->bIsDead)
+	{
+		GetWorld()->GetTimerManager().ClearTimer(ScoreTimerHandle);
+	}
 }
 

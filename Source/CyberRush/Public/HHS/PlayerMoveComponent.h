@@ -60,5 +60,17 @@ public:
 	
 	UPROPERTY(EditDefaultsOnly, Category="Input")
 	class UInputAction* IA_Slide;
+	
+	UPROPERTY()
+	class ACyberRushGameMode* GameModeRef;
+	
+	FTimerHandle ScoreTimerHandle;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Runner|Score")
+	float ScoreInterval = 0.5f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Runner|Score")
+	int32 ScorePerInterval = 5;
+
+	void AddScoreOverTime();
 };

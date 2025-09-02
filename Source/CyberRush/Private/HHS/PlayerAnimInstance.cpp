@@ -22,5 +22,7 @@ void UPlayerAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 	//if( movement != nullptr )
 	//{
 	//	IsInAir = movement->IsFalling();
-	//}	
+	//}
+
+	isDead = player->bIsDead;
 }

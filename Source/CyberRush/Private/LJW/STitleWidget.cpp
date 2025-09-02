@@ -16,8 +16,9 @@ void STitleWidget::Construct(const FArguments& InArgs)
 	
 	const FText TitleText = FText::FromString("CyberRush");
 	const FText StartText = FText::FromString("Start Game");
+	const FText SettingText = FText::FromString("GearUp");
+	const FText ShopText = FText::FromString("Shop");
 	const FText OptionsText = FText::FromString("Options");
-	const FText QuitText = FText::FromString("Quit Game");
 
 	FSlateFontInfo ButtonTextStyle = FCoreStyle::Get().GetFontStyle("EmbossedText");
 	ButtonTextStyle.Size = 40.f;
@@ -42,6 +43,7 @@ void STitleWidget::Construct(const FArguments& InArgs)
 			[
 				SNew(SVerticalBox)
 				+ SVerticalBox::Slot()
+				.AutoHeight()
 				[
 					SNew(STextBlock)
 					.Font(TitleTextStyle)
@@ -51,8 +53,11 @@ void STitleWidget::Construct(const FArguments& InArgs)
 
 				+SVerticalBox::Slot()
 				.Padding(ButtonPadding)
+				.AutoHeight()
 				[
 					SNew(SButton)
+					.HAlign(HAlign_Center)
+					.VAlign(VAlign_Center)
 					.OnClicked(this, &STitleWidget::OnPlayClicked)
 					[
 						SNew(STextBlock)
@@ -61,28 +66,50 @@ void STitleWidget::Construct(const FArguments& InArgs)
 						.Justification(ETextJustify::Center)
 					]
 				]
-
+				
 				+SVerticalBox::Slot()
 				.Padding(ButtonPadding)
+				.AutoHeight()
 				[
 					SNew(SButton)
+					.HAlign(HAlign_Center)
+					.VAlign(VAlign_Center)
+					//.OnClicked(this, &STitleWidget::OnPlayClicked)
 					[
 						SNew(STextBlock)
 						.Font(ButtonTextStyle)
-						.Text(OptionsText)
+						.Text(SettingText)
 						.Justification(ETextJustify::Center)
 					]
 				]
 
 				+SVerticalBox::Slot()
 				.Padding(ButtonPadding)
+				.AutoHeight()
 				[
 					SNew(SButton)
-					.OnClicked(this, &STitleWidget::OnQuitClicked)
+					.HAlign(HAlign_Center)
+					.VAlign(VAlign_Center)
+					//.OnClicked(this, &STitleWidget::OnPlayClicked)
 					[
 						SNew(STextBlock)
 						.Font(ButtonTextStyle)
-						.Text(QuitText)
+						.Text(ShopText)
+						.Justification(ETextJustify::Center)
+					]
+				]
+				
+				+SVerticalBox::Slot()
+				.Padding(ButtonPadding)
+				.AutoHeight()
+				[
+					SNew(SButton)
+					.HAlign(HAlign_Center)
+					.VAlign(VAlign_Center)
+					[
+						SNew(STextBlock)
+						.Font(ButtonTextStyle)
+						.Text(OptionsText)
 						.Justification(ETextJustify::Center)
 					]
 				]
@@ -101,17 +128,5 @@ FReply STitleWidget::OnPlayClicked() const
 		}
 	}
 	
-	return FReply::Handled();
-}
-
-FReply STitleWidget::OnQuitClicked() const
-{
-	if (OwningHUD.IsValid())
-	{
-		if (APlayerController* PC = OwningHUD->PlayerOwner)
-		{
-			PC->ConsoleCommand("quit");
-		}
-	}
 	return FReply::Handled();
 }

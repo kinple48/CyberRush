@@ -4,6 +4,7 @@
 #include "LJW/Item.h"
 
 #include "CyberRushCharacter.h"
+#include "CyberRushGameMode.h"
 #include "Components/BoxComponent.h"
 #include "GameFramework/RotatingMovementComponent.h"
 #include "HHS/RunnerPlayerBase.h"
@@ -56,6 +57,15 @@ void AItem::OnItemBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor*
 {
 	if (auto Player = Cast<ARunnerPlayerBase>(OtherActor))
 	{
+		AGameModeBase* GameModeBase = UGameplayStatics::GetGameMode(GetWorld());
+		if (GameModeBase)
+		{
+			if (ACyberRushGameMode* MyGameMode = Cast<ACyberRushGameMode>(GameModeBase))
+			{
+				MyGameMode->AddScore(ScoreItem);
+			}
+		}
+		
 		UGameplayStatics::PlaySound2D(GetWorld(),ItemSound);
 		Destroy();
 	}

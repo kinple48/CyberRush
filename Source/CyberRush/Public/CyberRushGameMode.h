@@ -19,6 +19,9 @@ public:
 	ACyberRushGameMode();
 
 	UPROPERTY(EditAnywhere)
+	TSubclassOf<class AFloorTile> StartTileClass;
+	
+	UPROPERTY(EditAnywhere)
 	TArray<TSubclassOf<class AFloorTile>> TileClasses;
 
 	FTransform NextSpawnPoint = FTransform::Identity;
@@ -26,9 +29,20 @@ public:
 	void AddFloorTile();
 
 	void AddScore(int32 Point);
-
-private:
+	
 	int32 CurrentScore = 0;
+	int32 HighScore = 0;
+
+	UPROPERTY(EditAnywhere)
+	FString SaveSlotName = TEXT("HighScore");
+
+	UPROPERTY(EditAnywhere)
+	int32 UserIndex = 0;
+	
+	void SaveGameData();
+	void LoadGameData();
+
+	void PlayerDied(AController* PlayerController);
 };
 
 

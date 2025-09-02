@@ -11,7 +11,6 @@ enum class EEnemyState : uint8
 {
 	Idle UMETA(DisplayName = "Idle"),
 	Move UMETA(DisplayName = "Move"),
-	Attack UMETA(DisplayName = "Attack"),
 	Damage UMETA(DisplayName = "Damage"),
 	Die UMETA(DisplayName = "Die"),
 	
@@ -46,26 +45,25 @@ public:
 
 	float IdleDelayTime = 0.3f;
 	float CurrentTime = 0.0f;
-
-	UPROPERTY(EditAnywhere, Category = FSM)
-	float attackRange = 10.f;
-
-	UPROPERTY(EditAnywhere, Category = FSM)
-	float attackDelayTime = 2.0f;
 	
 	UPROPERTY(EditAnywhere, Category = FSM)
-	float damageDelayTime = 2.f;
+	float damageDelayTime = 1.f;
 	
 	void IdleState();
 	void MoveState();
-	void AttackState();
 	void DamageState();
 	void DieState();
 
-	void OnDamageProcess();
+	void OnDamageProcess(int32 Damage);
 
-	int32 hp = 3;
+	int32 hp = 2;
 
 	UPROPERTY()
 	class UEnemyAnim* Anim;
+
+	bool bDieDone;
+	FORCEINLINE void onDieEnd()
+	{
+		bDieDone = true;
+	}
 };

@@ -39,4 +39,7 @@ public:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	bool bIsActive = false;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Runner|Score")
+	int32 ScoreOnHit = 100;
 };

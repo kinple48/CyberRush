@@ -1,15 +1,13 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
 #pragma once
 
 #include "SlateBasics.h"
 #include "SlateExtras.h"
 
-class SInGameMenu : public SCompoundWidget
+class SGameOverWidget : public SCompoundWidget
 {
 public:
 
-	SLATE_BEGIN_ARGS(SInGameMenu) {}
+	SLATE_BEGIN_ARGS(SGameOverWidget) {}
 		
 	SLATE_ARGUMENT(TWeakObjectPtr<class AMainHUD>, OwningHUD);
 	SLATE_ARGUMENT(TWeakObjectPtr<class ARunnerPlayerBase>, OwnerCharacter)
@@ -20,9 +18,13 @@ public:
 	TWeakObjectPtr<class AMainHUD> OwningHUD;
 	TWeakObjectPtr<class ARunnerPlayerBase> OwnerCharacter;
 	
-	FReply OnResumeGameClicked() const;
-	FReply OnOptionsClicked() const;
-	FReply OnQuitGameClicked() const;
-	
 	virtual bool SupportsKeyboardFocus() const override { return true; }
+
+private:
+	FText GetScoreText() const;
+	FText GetHighScoreText() const;
+
+public:
+	FReply OnReStartClicked() const;
+	FReply OnQuitGameClicked() const;
 };

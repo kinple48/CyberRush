@@ -10,6 +10,7 @@
 #include "Engine/Engine.h"
 #include "GameFramework/PlayerController.h"
 #include "HHS/RunnerPlayerBase.h"
+#include "LJW/SGameOverWidget.h"
 
 void AMainHUD::BeginPlay()
 {
@@ -61,6 +62,35 @@ void AMainHUD::QuitGame()
 	if (GEngine && GEngine->GameViewport && MainWidgetContainer.IsValid())
 	{
 		GEngine->GameViewport->RemoveViewportWidgetContent(MainWidgetContainer.ToSharedRef());
+
+		if (PlayerOwner)
+		{
+			PlayerOwner->bShowMouseCursor = true;
+			PlayerOwner->SetInputMode(FInputModeGameAndUI());
+		}
+	}
+}
+
+void AMainHUD::ShowGameOverUI()
+{
+	if (GEngine && GEngine->GameViewport)
+	{
+		GameOverWidget = SNew(SGameOverWidget).OwningHUD(this);
+		GEngine->GameViewport->AddViewportWidgetContent(SAssignNew(GameOverWidgetContainer,SWeakWidget).PossiblyNullContent(GameOverWidget.ToSharedRef()));
+		
+		if (PlayerOwner)
+		{
+			PlayerOwner->bShowMouseCursor = true;
+			PlayerOwner->SetInputMode(FInputModeUIOnly());
+		}
+	}
+}
+
+void AMainHUD::RemoveGameOverUI()
+{
+	if (GEngine && GEngine->GameViewport && GameOverWidgetContainer.IsValid())
+	{
+		GEngine->GameViewport->RemoveViewportWidgetContent(GameOverWidgetContainer.ToSharedRef());
 
 		if (PlayerOwner)
 		{

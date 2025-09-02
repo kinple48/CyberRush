@@ -3,6 +3,8 @@
 
 #include "LJW/EnemyFSM.h"
 
+#include "Components/CapsuleComponent.h"
+#include "Components/SphereComponent.h"
 #include "HHS/RunnerPlayerBase.h"
 #include "Kismet/GameplayStatics.h"
 #include "LJW/EnemyAnim.h"
@@ -46,9 +48,6 @@ void UEnemyFSM::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompon
 	case EEnemyState::Move:
 		MoveState();
 		break;
-	case EEnemyState::Attack:
-		AttackState();
-		break;
 	case EEnemyState::Damage:
 		DamageState();
 		break;
@@ -74,32 +73,9 @@ void UEnemyFSM::MoveState()
 {
 	if (!target || !me) return;
 	
-
 	FVector Destination = target->GetActorLocation();
 	FVector Dir = Destination - me->GetActorLocation();
 	me->AddMovementInput(Dir);
-	if (Dir.Size() <= attackRange)
-	{
-		mState = EEnemyState::Attack;
-		Anim->AnimState = mState;
-		CurrentTime = attackDelayTime;
-	}
-}
-
-void UEnemyFSM::AttackState()
-{
-	CurrentTime += GetWorld()->DeltaTimeSeconds;
-	if (CurrentTime >= attackDelayTime)
-	{
-		CurrentTime = 0.0f;
-	}
-	float distance = FVector::Distance(target->GetActorLocation(), me->GetActorLocation());
-
-	if (distance > attackRange)
-	{
-		mState = EEnemyState::Move;
-		Anim->AnimState = mState;
-	}
 }
 
 void UEnemyFSM::DamageState()
@@ -116,19 +92,29 @@ void UEnemyFSM::DamageState()
 
 void UEnemyFSM::DieState()
 {
+	if (!bDieDone) return;
+	const FVector EmitterScale(2.0f);
+	UGameplayStatics::SpawnEmitterAtLocation(GetWorld(),me->ExplosionVFX,me->GetActorLocation(), FRotator::ZeroRotator,EmitterScale, true);
+	me->Destroy();
 }
 
-void UEnemyFSM::OnDamageProcess()
+void UEnemyFSM::OnDamageProcess(int32 Damage)
 {
-	hp--;
+	hp -= Damage;
 
 	if (hp > 0)
 	{
 		mState = EEnemyState::Damage;
+		int32 randValue = FMath::RandRange(0,1);
+		FString sectionName = FString::Printf(TEXT("Damage %d"), randValue);
+		me->PlayAnimMontage(Anim->EnemyMontage,1.f,FName(*sectionName));
 	}
 	else
 	{
 		mState = EEnemyState::Die;
+		me->GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+		me->AttackRange->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+		me->PlayAnimMontage(Anim->EnemyMontage, 1.f, TEXT("Die"));
 	}
 	Anim->AnimState = mState;
 }
