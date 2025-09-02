@@ -60,4 +60,10 @@ public:
 
 	UPROPERTY()
 	class UEnemyAnim* Anim;
+
+	bool bDieDone;
+	FORCEINLINE void onDieEnd()
+	{
+		bDieDone = true;
+	}
 };

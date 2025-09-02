@@ -3,6 +3,8 @@
 
 #include "LJW/EnemyFSM.h"
 
+#include "Components/CapsuleComponent.h"
+#include "Components/SphereComponent.h"
 #include "HHS/RunnerPlayerBase.h"
 #include "Kismet/GameplayStatics.h"
 #include "LJW/EnemyAnim.h"
@@ -90,6 +92,10 @@ void UEnemyFSM::DamageState()
 
 void UEnemyFSM::DieState()
 {
+	if (!bDieDone) return;
+	const FVector EmitterScale(2.0f);
+	UGameplayStatics::SpawnEmitterAtLocation(GetWorld(),me->ExplosionVFX,me->GetActorLocation(), FRotator::ZeroRotator,EmitterScale, true);
+	me->Destroy();
 }
 
 void UEnemyFSM::OnDamageProcess(int32 Damage)
@@ -106,6 +112,9 @@ void UEnemyFSM::OnDamageProcess(int32 Damage)
 	else
 	{
 		mState = EEnemyState::Die;
+		me->GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+		me->AttackRange->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+		me->PlayAnimMontage(Anim->EnemyMontage, 1.f, TEXT("Die"));
 	}
 	Anim->AnimState = mState;
 }

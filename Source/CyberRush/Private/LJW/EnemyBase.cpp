@@ -48,7 +48,6 @@ void AEnemyBase::OnAttackRangeBeginOverlap(UPrimitiveComponent* OverlappedCompon
 		{
 			MyGameMode->PlayerDied(player->GetController());
 		}
-		//player->Destroy();
 	}
 }
 
