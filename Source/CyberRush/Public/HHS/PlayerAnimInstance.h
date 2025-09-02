@@ -22,4 +22,7 @@ public:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category=PlayerAnim)
 	bool IsInAir;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category=PlayerAnim)
+	bool isDead = false;
 };

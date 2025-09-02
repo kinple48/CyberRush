@@ -96,8 +96,5 @@ void ARunnerPlayerBase::SetupPlayerInputComponent(UInputComponent* PlayerInputCo
 
 void ARunnerPlayerBase::DamageProcess()
 {
-	//--HP;
-
- 	if (HP <= 0)
- 		bIsDead = true;
+ 	bIsDead = true;
 }

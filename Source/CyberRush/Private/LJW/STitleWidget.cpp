@@ -16,6 +16,8 @@ void STitleWidget::Construct(const FArguments& InArgs)
 	
 	const FText TitleText = FText::FromString("CyberRush");
 	const FText StartText = FText::FromString("Start Game");
+	const FText SettingText = FText::FromString("GearUp");
+	const FText ShopText = FText::FromString("Shop");
 	const FText OptionsText = FText::FromString("Options");
 
 	FSlateFontInfo ButtonTextStyle = FCoreStyle::Get().GetFontStyle("EmbossedText");
@@ -41,6 +43,7 @@ void STitleWidget::Construct(const FArguments& InArgs)
 			[
 				SNew(SVerticalBox)
 				+ SVerticalBox::Slot()
+				.AutoHeight()
 				[
 					SNew(STextBlock)
 					.Font(TitleTextStyle)
@@ -50,8 +53,11 @@ void STitleWidget::Construct(const FArguments& InArgs)
 
 				+SVerticalBox::Slot()
 				.Padding(ButtonPadding)
+				.AutoHeight()
 				[
 					SNew(SButton)
+					.HAlign(HAlign_Center)
+					.VAlign(VAlign_Center)
 					.OnClicked(this, &STitleWidget::OnPlayClicked)
 					[
 						SNew(STextBlock)
@@ -60,11 +66,46 @@ void STitleWidget::Construct(const FArguments& InArgs)
 						.Justification(ETextJustify::Center)
 					]
 				]
+				
+				+SVerticalBox::Slot()
+				.Padding(ButtonPadding)
+				.AutoHeight()
+				[
+					SNew(SButton)
+					.HAlign(HAlign_Center)
+					.VAlign(VAlign_Center)
+					//.OnClicked(this, &STitleWidget::OnPlayClicked)
+					[
+						SNew(STextBlock)
+						.Font(ButtonTextStyle)
+						.Text(SettingText)
+						.Justification(ETextJustify::Center)
+					]
+				]
 
 				+SVerticalBox::Slot()
 				.Padding(ButtonPadding)
+				.AutoHeight()
 				[
 					SNew(SButton)
+					.HAlign(HAlign_Center)
+					.VAlign(VAlign_Center)
+					//.OnClicked(this, &STitleWidget::OnPlayClicked)
+					[
+						SNew(STextBlock)
+						.Font(ButtonTextStyle)
+						.Text(ShopText)
+						.Justification(ETextJustify::Center)
+					]
+				]
+				
+				+SVerticalBox::Slot()
+				.Padding(ButtonPadding)
+				.AutoHeight()
+				[
+					SNew(SButton)
+					.HAlign(HAlign_Center)
+					.VAlign(VAlign_Center)
 					[
 						SNew(STextBlock)
 						.Font(ButtonTextStyle)

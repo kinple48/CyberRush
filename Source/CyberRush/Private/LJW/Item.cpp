@@ -62,7 +62,7 @@ void AItem::OnItemBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor*
 		{
 			if (ACyberRushGameMode* MyGameMode = Cast<ACyberRushGameMode>(GameModeBase))
 			{
-				MyGameMode->AddScore(10);
+				MyGameMode->AddScore(ScoreItem);
 			}
 		}
 		
