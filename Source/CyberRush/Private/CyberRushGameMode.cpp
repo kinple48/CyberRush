@@ -2,7 +2,6 @@
 
 #include "CyberRushGameMode.h"
 #include "CyberRushCharacter.h"
-#include "LocalizationDescriptor.h"
 #include "Kismet/GameplayStatics.h"
 #include "LJW/CyberRushSaveGame.h"
 #include "LJW/FloorTile.h"
