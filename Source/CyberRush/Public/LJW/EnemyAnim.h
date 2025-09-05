@@ -19,9 +19,4 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = FSM)
 	EEnemyState AnimState = EEnemyState::Idle;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = FSM)
-	class UAnimMontage* EnemyMontage;
-
-	UFUNCTION()
-	void AnimNotify_DieEnd();
 };

@@ -107,14 +107,14 @@ void UEnemyFSM::OnDamageProcess(int32 Damage)
 		mState = EEnemyState::Damage;
 		int32 randValue = FMath::RandRange(0,1);
 		FString sectionName = FString::Printf(TEXT("Damage %d"), randValue);
-		me->PlayAnimMontage(Anim->EnemyMontage,1.f,FName(*sectionName));
+		//me->PlayAnimMontage(Anim->EnemyMontage,1.f,FName(*sectionName));
 	}
 	else
 	{
 		mState = EEnemyState::Die;
 		me->GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 		me->AttackRange->SetCollisionEnabled(ECollisionEnabled::NoCollision);
-		me->PlayAnimMontage(Anim->EnemyMontage, 1.f, TEXT("Die"));
+		//me->PlayAnimMontage(Anim->EnemyMontage, 1.f, TEXT("Die"));
 	}
 	Anim->AnimState = mState;
 }

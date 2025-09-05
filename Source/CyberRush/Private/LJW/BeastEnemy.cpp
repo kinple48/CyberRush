@@ -8,11 +8,11 @@
 ABeastEnemy::ABeastEnemy()
 {
 	FSM = CreateDefaultSubobject<UEnemyFSM>(TEXT("FSM"));
-	ConstructorHelpers::FClassFinder<UAnimInstance> tmpAnim(TEXT("/Script/Engine.AnimBlueprint'/Game/LJW/Enemy/BeastEnemy/ABP_BeastEnemy.ABP_BeastEnemy_C'"));
+	/*ConstructorHelpers::FClassFinder<UAnimInstance> tmpAnim(TEXT("/Script/Engine.AnimBlueprint'/Game/LJW/Enemy/BeastEnemy/ABP_BeastEnemy.ABP_BeastEnemy_C'"));
 	if (tmpAnim.Succeeded())
 	{
 		GetMesh()->SetAnimInstanceClass(tmpAnim.Class);
-	}
+	}*/
 }
 
 void ABeastEnemy::BeginPlay()

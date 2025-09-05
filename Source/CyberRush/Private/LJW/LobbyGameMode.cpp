@@ -2,7 +2,6 @@
 
 
 #include "LJW/LobbyGameMode.h"
-#include "LJW/TitleHUD.h"
 #include "LJW/MainPlayerController.h"
 
 ALobbyGameMode::ALobbyGameMode()
@@ -14,7 +13,6 @@ ALobbyGameMode::ALobbyGameMode()
 	}
 	
 	PlayerControllerClass = AMainPlayerController::StaticClass();
-	HUDClass = ATitleHUD::StaticClass();
 }
 
 void ALobbyGameMode::BeginPlay()

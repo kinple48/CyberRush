@@ -6,7 +6,6 @@
 #include "LJW/CyberRushSaveGame.h"
 #include "LJW/FloorTile.h"
 #include "LJW/FloorTileType1.h"
-#include "LJW/MainHUD.h"
 #include "LJW/MainPlayerController.h"
 #include "UObject/ConstructorHelpers.h"
 
@@ -20,7 +19,6 @@ ACyberRushGameMode::ACyberRushGameMode()
 	}
 
 	PlayerControllerClass = AMainPlayerController::StaticClass();
-	HUDClass = AMainHUD::StaticClass();
 }
 
 void ACyberRushGameMode::BeginPlay()
@@ -84,13 +82,6 @@ void ACyberRushGameMode::LoadGameData()
 
 void ACyberRushGameMode::PlayerDied(AController* PlayerController)
 {
-	if (APlayerController* PC = Cast<APlayerController>(PlayerController))
-	{
-		if (AMainHUD* MyHUD = Cast<AMainHUD>(PC->GetHUD()))
-		{
-			MyHUD->ShowGameOverUI();
-		}
-	}
 	APawn* DeadPawn = PlayerController->GetPawn();
 	if (DeadPawn)
 	{
