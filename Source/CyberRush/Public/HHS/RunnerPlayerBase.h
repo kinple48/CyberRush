@@ -34,7 +34,7 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Combat")
 	class UPlayerCombatComponent* CombatComp;
 
-	UPROPERTY(EditDefaultsOnly)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Weapon")
 	class USkeletalMeshComponent* GunMeshComp;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category=HP)

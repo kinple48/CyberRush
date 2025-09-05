@@ -14,7 +14,7 @@
 {
 	PrimaryActorTick.bCanEverTick = true;
 
-	ConstructorHelpers::FObjectFinder<USkeletalMesh> TempMesh(TEXT("/Script/Engine.SkeletalMesh'/Game/IdaFaber/Meshes/Girl/SK_CYBER_SF_F_01.SK_CYBER_SF_F_01'"));
+	ConstructorHelpers::FObjectFinder<USkeletalMesh> TempMesh(TEXT("/Script/Engine.SkeletalMesh'/Game/QuangPhan/G2_Mercenaries/Meshes/Characters/Combines/SK_PP801_MercC.SK_PP801_MercC'"));
 
 	if (TempMesh.Succeeded())
 	{
@@ -34,7 +34,7 @@
 
  	GunMeshComp = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("GunMeshComp"));
 	GunMeshComp->SetupAttachment(GetMesh(), TEXT("ik_hand_rSocket"));
- 	ConstructorHelpers::FObjectFinder<USkeletalMesh> TmpGun(TEXT("/Script/Engine.SkeletalMesh'/Game/Scifi_Arsenal_Vol2/Skeletal_Meshes/Sci-fi_Pistol_01/SK_Sci-fi_Pistol_01_NoIronsight.SK_Sci-fi_Pistol_01_NoIronsight'"));
+ 	ConstructorHelpers::FObjectFinder<USkeletalMesh> TmpGun(TEXT("/Script/Engine.SkeletalMesh'/Game/NewAsset/scifipistol/SciFiPistol/SKM_SciFiPistol.SKM_SciFiPistol'"));
  	if (TmpGun.Succeeded())
  	{
  		GunMeshComp->SetSkeletalMesh(TmpGun.Object);
