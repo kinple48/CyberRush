@@ -6,7 +6,7 @@
 #include "Components/ArrowComponent.h"
 #include "Components/BoxComponent.h"
 #include "HHS/RunnerPlayerBase.h"
-#include "LJW/EnemyBase.h"
+//#include "LJW/EnemyBase.h"
 
 AFloorTileType3::AFloorTileType3()
 {
@@ -70,6 +70,6 @@ void AFloorTileType3::SpawnEnemy()
 	SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
 	//GetWorld()->SpawnActor<AEnemyBase>(EnemyFactory, EnemySponPoint1->GetComponentTransform(), SpawnParams);
 	//GetWorld()->SpawnActor<AEnemyBase>(EnemyFactory, EnemySponPoint2->GetComponentTransform(), SpawnParams);
-	GetWorld()->SpawnActor<AEnemyBase>(EnemyFactory, EnemySponPoint3->GetComponentTransform(), SpawnParams);
-	GetWorld()->SpawnActor<AEnemyBase>(EnemyFactory, EnemySponPoint4->GetComponentTransform(), SpawnParams);
+	//GetWorld()->SpawnActor<AEnemyBase>(EnemyFactory, EnemySponPoint3->GetComponentTransform(), SpawnParams);
+	//GetWorld()->SpawnActor<AEnemyBase>(EnemyFactory, EnemySponPoint4->GetComponentTransform(), SpawnParams);
 }
