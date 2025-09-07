@@ -8,6 +8,7 @@
 #include "GameFramework/ProjectileMovementComponent.h"
 #include "LJW/BeastEnemy.h"
 #include "LJW/BeastEnemyFSM.h"
+#include "LJW/EnemyBase.h"
 //#include "LJW/EnemyBase.h"
 //#include "LJW/EnemyFSM.h"
 
@@ -43,7 +44,7 @@ void ABullet::BeginPlay()
 void ABullet::OnOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp,
 	int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	if (ABeastEnemy* Enemy = Cast<ABeastEnemy>(OtherActor))
+	if (AEnemyBase* Enemy = Cast<AEnemyBase>(OtherActor))
 	{
 		ACyberRushGameMode* GameMode = Cast<ACyberRushGameMode>(GetWorld()->GetAuthGameMode());
 
