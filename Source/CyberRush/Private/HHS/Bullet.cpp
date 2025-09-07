@@ -6,6 +6,8 @@
 #include "CyberRushGameMode.h"
 #include "Components/SphereComponent.h"
 #include "GameFramework/ProjectileMovementComponent.h"
+#include "LJW/BeastEnemy.h"
+#include "LJW/BeastEnemyFSM.h"
 //#include "LJW/EnemyBase.h"
 //#include "LJW/EnemyFSM.h"
 
@@ -41,7 +43,7 @@ void ABullet::BeginPlay()
 void ABullet::OnOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp,
 	int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	/*if (AEnemyBase* Enemy = Cast<AEnemyBase>(OtherActor))
+	if (ABeastEnemy* Enemy = Cast<ABeastEnemy>(OtherActor))
 	{
 		ACyberRushGameMode* GameMode = Cast<ACyberRushGameMode>(GetWorld()->GetAuthGameMode());
 
@@ -50,13 +52,13 @@ void ABullet::OnOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherA
 			GameMode->AddScore(ScoreOnHit);
 		}
 		
-		UEnemyFSM* enemyFSM = Enemy->FindComponentByClass<UEnemyFSM>();
+		UBeastEnemyFSM* enemyFSM = Enemy->FindComponentByClass<UBeastEnemyFSM>();
 		if (enemyFSM)
 		{
 			enemyFSM->OnDamageProcess(1);
 		}
 		Destroy();
-	}*/
+	}
 }
 
 void ABullet::SetActive(bool bValue)

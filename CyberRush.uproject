@@ -1,95 +1,95 @@
 {
-  "FileVersion": 3,
-  "EngineAssociation": "5.5",
-  "Category": "",
-  "Description": "",
-  "Modules": [
-    {
-      "Name": "CyberRush",
-      "Type": "Runtime",
-      "LoadingPhase": "Default"
-    }
-  ],
-  "Plugins": [
-    {
-      "Name": "ModelingToolsEditorMode",
-      "Enabled": true
-    },
-    {
-      "Name": "Bridge",
-      "Enabled": true
-    },
-    {
-      "Name": "Fab",
-      "Enabled": true
-    },
-    {
-      "Name": "MeshPainting",
-      "Enabled": true
-    },
-    {
-      "Name": "AnimationData",
-      "Enabled": true
-    },
-    {
-      "Name": "ControlRigSpline",
-      "Enabled": true
-    },
-    {
-      "Name": "ControlRigModules",
-      "Enabled": true
-    },
-    {
-      "Name": "IKRig",
-      "Enabled": true
-    },
-    {
-      "Name": "SequencerAnimTools",
-      "Enabled": true
-    },
-    {
-      "Name": "GLTFExporter",
-      "Enabled": true
-    },
-    {
-      "Name": "InterchangeEditor",
-      "Enabled": true,
-      "SupportedTargetPlatforms": [
-        "Win64",
-        "Linux",
-        "Mac"
-      ]
-    },
-    {
-      "Name": "InterchangeTests",
-      "Enabled": true
-    },
-    {
-      "Name": "Interchange",
-      "Enabled": true,
-      "SupportedTargetPlatforms": [
-        "Win64",
-        "Linux",
-        "Mac"
-      ]
-    },
-    {
-      "Name": "ControlRig",
-      "Enabled": true
-    },
-    {
-      "Name": "VisualStudioTools",
-      "Enabled": true,
-      "SupportedTargetPlatforms": [
-        "Win64"
-      ]
-    }
-  ],
-  "TargetPlatforms": [
-    "Windows",
-    "Android"
-  ],
-  "AdditionalRootDirectories": [],
-  "AdditionalPluginDirectories": [],
-  "EpicSampleNameHash": ""
+	"FileVersion": 3,
+	"EngineAssociation": "5.5",
+	"Category": "",
+	"Description": "",
+	"Modules": [
+		{
+			"Name": "CyberRush",
+			"Type": "Runtime",
+			"LoadingPhase": "Default",
+			"AdditionalDependencies": [
+				"Engine"
+			]
+		}
+	],
+	"Plugins": [
+		{
+			"Name": "ModelingToolsEditorMode",
+			"Enabled": true
+		},
+		{
+			"Name": "Bridge",
+			"Enabled": true
+		},
+		{
+			"Name": "Fab",
+			"Enabled": true
+		},
+		{
+			"Name": "MeshPainting",
+			"Enabled": true
+		},
+		{
+			"Name": "AnimationData",
+			"Enabled": true
+		},
+		{
+			"Name": "ControlRigSpline",
+			"Enabled": true
+		},
+		{
+			"Name": "ControlRigModules",
+			"Enabled": true
+		},
+		{
+			"Name": "IKRig",
+			"Enabled": true
+		},
+		{
+			"Name": "SequencerAnimTools",
+			"Enabled": true
+		},
+		{
+			"Name": "GLTFExporter",
+			"Enabled": true
+		},
+		{
+			"Name": "InterchangeEditor",
+			"Enabled": true,
+			"SupportedTargetPlatforms": [
+				"Win64",
+				"Linux",
+				"Mac"
+			]
+		},
+		{
+			"Name": "InterchangeTests",
+			"Enabled": true
+		},
+		{
+			"Name": "Interchange",
+			"Enabled": true,
+			"SupportedTargetPlatforms": [
+				"Win64",
+				"Linux",
+				"Mac"
+			]
+		},
+		{
+			"Name": "ControlRig",
+			"Enabled": true
+		},
+		{
+			"Name": "VisualStudioTools",
+			"Enabled": true,
+			"SupportedTargetPlatforms": [
+				"Win64"
+			]
+		}
+	],
+	"TargetPlatforms": [
+		"Windows",
+		"Android"
+	]
 }

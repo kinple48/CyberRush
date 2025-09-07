@@ -30,8 +30,14 @@ public:
 
 	void AddScore(int32 Point);
 	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	int32 CurrentScore = 0;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	int32 HighScore = 0;
+
+	UPROPERTY(BlueprintReadWrite, Category="UI")
+    UUserWidget* MainWidgetInstance;
 
 	UPROPERTY(EditAnywhere)
 	FString SaveSlotName = TEXT("HighScore");

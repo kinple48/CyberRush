@@ -119,6 +119,7 @@ void UPlayerMoveComponent::SetupInputBinding(UEnhancedInputComponent* InputCompo
 	InputComponent->BindAction(IA_Jump, ETriggerEvent::Started, this, &UPlayerMoveComponent::Jump);
 	//InputComponent->BindAction(IA_Slide, ETriggerEvent::Started, this, &UPlayerMoveComponent::SlideStart);
 	//InputComponent->BindAction(IA_Slide, ETriggerEvent::Completed, this, &UPlayerMoveComponent::SlideEnd);
+	
 
 }
 
