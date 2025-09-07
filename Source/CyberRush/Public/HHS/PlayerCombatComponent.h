@@ -25,6 +25,7 @@ public:
 	UPROPERTY(EditDefaultsOnly, Category="Input")
 	class UInputAction* IA_Fire;
 	
+	UFUNCTION(BlueprintCallable, Category="Input")
 	void Fire();
 
 	UPROPERTY(EditDefaultsOnly, Category = "Combat")
