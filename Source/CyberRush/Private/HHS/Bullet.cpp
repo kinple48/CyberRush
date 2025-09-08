@@ -26,8 +26,8 @@ ABullet::ABullet()
 	//BulletMesh->SetRelativeScale3D(FVector(0.2f)); // 작게 조정
 	
 	BulletMovement = CreateDefaultSubobject<UProjectileMovementComponent>(TEXT("ProjectileComp"));
-	BulletMovement->InitialSpeed = 2000.f;
-	BulletMovement->MaxSpeed = 2000.f;
+	BulletMovement->InitialSpeed = 3000.f;
+	BulletMovement->MaxSpeed = 3000.f;
 	BulletMovement->bRotationFollowsVelocity = true;
 	BulletMovement->ProjectileGravityScale = 0.f; 
 

@@ -6,6 +6,7 @@
 #include "LJW/CyberRushSaveGame.h"
 #include "LJW/FloorTile.h"
 #include "LJW/FloorTileType1.h"
+#include "LJW/FloorTileType2.h"
 #include "LJW/MainPlayerController.h"
 #include "UObject/ConstructorHelpers.h"
 
@@ -24,7 +25,7 @@ ACyberRushGameMode::ACyberRushGameMode()
 void ACyberRushGameMode::BeginPlay()
 {
 	Super::BeginPlay();
-	NextSpawnPoint.SetLocation(FVector(-500, 0, 0));
+	NextSpawnPoint.SetLocation(FVector(0, 0, 0));
 	if (StartTileClass)
 	{
 		AFloorTile* StartTile = GetWorld()->SpawnActor<AFloorTile>(StartTileClass, NextSpawnPoint);
@@ -51,6 +52,14 @@ void ACyberRushGameMode::AddFloorTile()
 	if (FloorTile)
 	{
 		NextSpawnPoint = FloorTile->GetAttachTransform();
+		if (AFloorTileType1* TileType1 = Cast<AFloorTileType1>(FloorTile))
+		{
+			TileType1->SpawnItemLine();
+		}
+		else if (AFloorTileType2* TileType2 = Cast<AFloorTileType2>(FloorTile))
+		{
+			TileType2->SpawnObjectLine();
+		}
 	}
 }
 

@@ -73,4 +73,10 @@ public:
 	int32 ScorePerInterval = 5;
 
 	void AddScoreOverTime();
+
+	UPROPERTY(EditAnywhere, Category="Jump Settings")
+	float GravityScale_Up = 0.5f;
+
+	UPROPERTY(EditAnywhere, Category="Jump Settings")
+	float GravityScale_Down = 2.5f;
 };

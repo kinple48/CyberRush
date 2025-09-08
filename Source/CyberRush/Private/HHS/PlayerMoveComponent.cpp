@@ -24,13 +24,13 @@ void UPlayerMoveComponent::BeginPlay()
 	OwningCharacter = Cast<ARunnerPlayerBase>(GetOwner());
 
 	// 이동속도 조절
-	OwningCharacter->GetCharacterMovement()->MaxWalkSpeed = 1200.f;
+	OwningCharacter->GetCharacterMovement()->MaxWalkSpeed = 1500.f;
 
 	UCharacterMovementComponent* MoveComp = OwningCharacter->GetCharacterMovement();
 	if (MoveComp)
 	{
-		MoveComp->MaxWalkSpeed = 1200.f;
-		MoveComp->JumpZVelocity = 600.f;    // 점프 높이
+		MoveComp->MaxWalkSpeed = 1500.f;
+		MoveComp->JumpZVelocity = 1150.f;
 		MoveComp->AirControl = 1.f;
 	}
 
@@ -59,6 +59,25 @@ void UPlayerMoveComponent::TickComponent(float DeltaTime, ELevelTick TickType, F
 	}
 	
 	UpdateLanePosition(DeltaTime);
+
+	UCharacterMovementComponent* MoveComp = OwningCharacter->GetCharacterMovement();
+	if (MoveComp->IsFalling())
+	{
+		const float VelocityZ = MoveComp->Velocity.Z;
+
+		if (VelocityZ > 0.f)
+		{
+			MoveComp->GravityScale = 3.0f;
+		}
+		else
+		{
+			MoveComp->GravityScale = 5.0f;
+		}
+	}
+	else
+	{
+		MoveComp->GravityScale = 3.0f;
+	}
 }
 
 void UPlayerMoveComponent::MoveLeft()

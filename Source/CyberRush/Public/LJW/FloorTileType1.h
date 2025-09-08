@@ -17,5 +17,22 @@ protected:
 	virtual void BeginPlay() override;
 	
 public:
-	void SpawnCoin();
+	UPROPERTY(EditAnywhere, Category = "Spawning")
+	TSubclassOf<class AItem> ItemFactory;
+
+	// Y 라인 위치 배열
+	UPROPERTY(EditAnywhere, Category = "Spawning")
+	TArray<float> LaneYPositions = { -250.f, 0.f, 250.f };
+
+	// 아이템 개수
+	UPROPERTY(EditAnywhere, Category = "Spawning")
+	int32 ItemCount = 4;
+
+	// 아이템 간 거리
+	UPROPERTY(EditAnywhere, Category = "Spawning")
+	float ItemSpacing = 100.f;
+
+	// 실제 스폰 함수
+	UFUNCTION(BlueprintCallable)
+	void SpawnItemLine();
 };
