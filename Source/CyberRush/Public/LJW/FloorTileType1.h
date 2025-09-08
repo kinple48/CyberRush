@@ -18,7 +18,4 @@ protected:
 	
 public:
 	void SpawnCoin();
-
-	UPROPERTY(EditAnywhere)
-	TSubclassOf<class AItem> ItemFactory;
 };

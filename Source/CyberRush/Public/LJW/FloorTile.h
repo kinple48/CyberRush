@@ -34,6 +34,9 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	class UBoxComponent* Boxcomp;
+
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<class AItem> ItemFactory;
 	
 	FTransform GetAttachTransform();
 	
