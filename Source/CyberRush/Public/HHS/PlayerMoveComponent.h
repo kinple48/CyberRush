@@ -28,7 +28,7 @@ public:
 	int32 CurrentLane = 1; // 0: Left, 1: Center, 2: Right
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Runner|Movement")
-	float LaneDistance = 300.f;
+	float LaneDistance = 250.f;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Runner|Movement")
 	float LaneInterpSpeed = 10.f;

@@ -19,7 +19,7 @@ void AFloorTileType1::BeginPlay()
 
 void AFloorTileType1::SpawnCoin()
 {
-	TArray<float> LaneYPositions = { -300.f, 0.f, 300.f };
+	TArray<float> LaneYPositions = { -250.f, 0.f, 250.f };
 	
 	int32 LaneIndex = FMath::RandRange(0, LaneYPositions.Num() - 1);
 	

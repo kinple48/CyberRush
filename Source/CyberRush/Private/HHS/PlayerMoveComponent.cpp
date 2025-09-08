@@ -24,14 +24,14 @@ void UPlayerMoveComponent::BeginPlay()
 	OwningCharacter = Cast<ARunnerPlayerBase>(GetOwner());
 
 	// 이동속도 조절
-	OwningCharacter->GetCharacterMovement()->MaxWalkSpeed = 800.f;
+	OwningCharacter->GetCharacterMovement()->MaxWalkSpeed = 1200.f;
 
 	UCharacterMovementComponent* MoveComp = OwningCharacter->GetCharacterMovement();
 	if (MoveComp)
 	{
-		MoveComp->MaxWalkSpeed = 800.f;
+		MoveComp->MaxWalkSpeed = 1200.f;
 		MoveComp->JumpZVelocity = 600.f;    // 점프 높이
-		MoveComp->AirControl = 0.35f;
+		MoveComp->AirControl = 1.f;
 	}
 
 	GameModeRef = Cast<ACyberRushGameMode>(GetWorld()->GetAuthGameMode());

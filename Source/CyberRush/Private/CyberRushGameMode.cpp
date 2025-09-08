@@ -34,7 +34,7 @@ void ACyberRushGameMode::BeginPlay()
 		}
 	}
 	
-	for (int32 i = 0; i < 2; i++)
+	for (int32 i = 0; i < 10; i++)
 	{
 		AddFloorTile();
 	}
