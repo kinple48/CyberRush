@@ -4,12 +4,18 @@
 #include "LJW/FloorTileType1.h"
 
 #include "LJW/Item.h"
+AFloorTileType1::AFloorTileType1()
+{
+
+}
 
 void AFloorTileType1::BeginPlay()
 {
 	Super::BeginPlay();
 	SpawnCoin();
 }
+
+
 
 void AFloorTileType1::SpawnCoin()
 {

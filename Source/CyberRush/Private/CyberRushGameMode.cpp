@@ -24,6 +24,7 @@ ACyberRushGameMode::ACyberRushGameMode()
 void ACyberRushGameMode::BeginPlay()
 {
 	Super::BeginPlay();
+	NextSpawnPoint.SetLocation(FVector(-500, 0, 0));
 	if (StartTileClass)
 	{
 		AFloorTile* StartTile = GetWorld()->SpawnActor<AFloorTile>(StartTileClass, NextSpawnPoint);
@@ -33,7 +34,7 @@ void ACyberRushGameMode::BeginPlay()
 		}
 	}
 	
-	for (int32 i = 0; i < 10; i++)
+	for (int32 i = 0; i < 2; i++)
 	{
 		AddFloorTile();
 	}
