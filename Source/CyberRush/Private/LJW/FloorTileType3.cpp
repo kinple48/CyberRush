@@ -11,19 +11,6 @@
 
 AFloorTileType3::AFloorTileType3()
 {
-	floor->SetRelativeScale3D(FVector(20.0f,10.0f,0.1f));
-	floor->SetRelativeLocation(FVector(1000.0f,0.0f,0.0f));
-
-	wall->SetRelativeScale3D(FVector(20.f,0.1f,2.0f));
-	wall->SetRelativeLocation(FVector(1000.0f,-500.0f,100.0f));
-
-	wall2->SetRelativeScale3D(FVector(20.f,0.1f,2.0f));
-	wall2->SetRelativeLocation(FVector(1000.0f,500.0f,100.0f));
-	
-	Boxcomp->SetRelativeLocation(FVector(2050.0f,0.0f,200.0f));
-
-	Arrowcomp->SetRelativeLocation(FVector(2000.0f,0.0f,0.0f));
-	
 	EnemySensor = CreateDefaultSubobject<UBoxComponent>(TEXT("EnemySensor"));
 	EnemySensor->SetRelativeLocation(FVector(-50.0f,0.0f,200.0f));
 	EnemySensor->SetBoxExtent(FVector(32.0f,500.0f,200.0f));
@@ -71,6 +58,4 @@ void AFloorTileType3::SpawnEnemy()
 	SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
 	GetWorld()->SpawnActor<ABeastEnemy>(EnemyFactory, EnemySponPoint1->GetComponentTransform(), SpawnParams);
 	GetWorld()->SpawnActor<ABeastEnemy>(EnemyFactory, EnemySponPoint2->GetComponentTransform(), SpawnParams);
-	//GetWorld()->SpawnActor<AEnemyBase>(EnemyFactory, EnemySponPoint3->GetComponentTransform(), SpawnParams);
-	//GetWorld()->SpawnActor<AEnemyBase>(EnemyFactory, EnemySponPoint4->GetComponentTransform(), SpawnParams);
 }

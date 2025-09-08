@@ -41,6 +41,7 @@ void AEnemyBase::OnCollisionRangeBeginOverlap(UPrimitiveComponent* OverlappedCom
 	auto player = Cast<ARunnerPlayerBase>(OtherActor);
 	if (player)
 	{
+		player->bIsDead = true;
 		Destroy();
 	}
 }

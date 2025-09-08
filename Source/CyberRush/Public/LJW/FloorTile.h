@@ -28,12 +28,6 @@ public:
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	class UStaticMeshComponent* floor;
-	
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	class UStaticMeshComponent* wall;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	class UStaticMeshComponent* wall2;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	class UArrowComponent* Arrowcomp;

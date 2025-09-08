@@ -74,7 +74,6 @@ void ARunnerPlayerBase::BeginPlay()
 void ARunnerPlayerBase::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
 }
 
 void ARunnerPlayerBase::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
