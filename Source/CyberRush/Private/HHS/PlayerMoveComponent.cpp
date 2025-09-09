@@ -53,7 +53,7 @@ void UPlayerMoveComponent::TickComponent(float DeltaTime, ELevelTick TickType, F
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
 	// 앞으로 자동 달리기
-	if (OwningCharacter)
+	if (OwningCharacter && !OwningCharacter->bIsDead)
 	{
 		OwningCharacter->AddMovementInput(OwningCharacter->GetActorForwardVector(), 1.0f);
 	}

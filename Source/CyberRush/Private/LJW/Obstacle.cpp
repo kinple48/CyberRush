@@ -1,27 +1,39 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
-
 #include "LJW/Obstacle.h"
 
-// Sets default values
+#include "Components/BoxComponent.h"
+#include "HHS/RunnerPlayerBase.h"
+
 AObstacle::AObstacle()
 {
- 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
-
+	scenecomp = CreateDefaultSubobject<USceneComponent>(TEXT("Root"));
+	SetRootComponent(scenecomp);
+	
+	boxcomp = CreateDefaultSubobject<UBoxComponent>(TEXT("BoxComponent"));
+	boxcomp->OnComponentBeginOverlap.AddDynamic(this, &AObstacle::OnBoxOverlap);
+	boxcomp->SetupAttachment(RootComponent);
+	boxcomp->SetBoxExtent(FVector(200, 100, 100));
 }
 
-// Called when the game starts or when spawned
 void AObstacle::BeginPlay()
 {
 	Super::BeginPlay();
-	
 }
 
-// Called every frame
 void AObstacle::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+}
+
+void AObstacle::OnBoxOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult)
+{
+	UE_LOG(LogTemp, Warning, TEXT("dead"));
+	auto player = Cast<ARunnerPlayerBase>(OtherActor);
+	if (player)
+	{
+		player->bIsDead = true;
+		UE_LOG(LogTemp, Warning, TEXT("Obstacle is dead"));
+	}
 }
 
