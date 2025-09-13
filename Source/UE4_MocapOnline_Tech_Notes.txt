@@ -10,7 +10,7 @@ A Motionbuilder 2015 file is included with the UE4 template skeleton setup with 
 Please see the document with details about FBX import into UE4:
 
 http://www.motioncaptureonline.com/blogs/news/ue4-version-compatiblility-and-usage-new-faq
-https://drive.google.com/drive/folders/0B-Z-hxYLrNEUVlZXQlN2SW1GWjg
+
 
 
 A Maya 2015 file is included with the UE4 template skeleton setup with the the HIK rig. Any of the FBX files can be imported, edited and animated as desired, and re-exported as new animations.

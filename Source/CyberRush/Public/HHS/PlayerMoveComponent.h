@@ -79,4 +79,9 @@ public:
 
 	UPROPERTY(EditAnywhere, Category="Jump Settings")
 	float GravityScale_Down = 2.5f;
+
+	bool bCanRun = false;
+
+	UPROPERTY()
+	class UPlayerAnimInstance* Anim;
 };

@@ -6,6 +6,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "LJW/BeastEnemy.h"
 #include "LJW/BeastEnemyAnim.h"
+#include "Components/SphereComponent.h"
 
 UBeastEnemyFSM::UBeastEnemyFSM()
 {
@@ -96,8 +97,8 @@ void UBeastEnemyFSM::OnDamageProcess(int32 damage)
 	{
 		mstate = EEnemyState::Die;
 		me->GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+		me->CollisionRange->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 		me->PlayAnimMontage(Anim->EnemyMontage, 1.f,TEXT("Die"));
 	}
 	Anim->AnimState = mstate;
 }
-

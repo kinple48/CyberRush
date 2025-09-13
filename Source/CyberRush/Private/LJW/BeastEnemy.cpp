@@ -8,7 +8,7 @@
 ABeastEnemy::ABeastEnemy()
 {
 	PrimaryActorTick.bCanEverTick = true;
-	CollisionRange->SetSphereRadius(90.f);
+	CollisionRange->SetSphereRadius(80.f);
 }
 
 void ABeastEnemy::BeginPlay()

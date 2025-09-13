@@ -2,6 +2,8 @@
 
 #include "Components/BoxComponent.h"
 #include "HHS/RunnerPlayerBase.h"
+#include "LJW/FloorTile.h"
+#include "HHS/PlayerMoveComponent.h"
 
 AObstacle::AObstacle()
 {
@@ -10,14 +12,21 @@ AObstacle::AObstacle()
 	SetRootComponent(scenecomp);
 	
 	boxcomp = CreateDefaultSubobject<UBoxComponent>(TEXT("BoxComponent"));
-	boxcomp->OnComponentBeginOverlap.AddDynamic(this, &AObstacle::OnBoxOverlap);
 	boxcomp->SetupAttachment(RootComponent);
 	boxcomp->SetBoxExtent(FVector(200, 100, 100));
+
+	boxcomp2 = CreateDefaultSubobject<UBoxComponent>(TEXT("boxcomp2"));
+	boxcomp2->SetupAttachment(RootComponent);
+	boxcomp2->SetBoxExtent(FVector(1.f,1.f,100.f));
+	boxcomp2->SetCollisionProfileName(TEXT("ItemChecker"));
+
 }
 
 void AObstacle::BeginPlay()
 {
 	Super::BeginPlay();
+	boxcomp->OnComponentBeginOverlap.AddDynamic(this, &AObstacle::OnBoxOverlap);
+	boxcomp2->OnComponentEndOverlap.AddDynamic(this, &AObstacle::OnItemEndOverlap);
 }
 
 void AObstacle::Tick(float DeltaTime)
@@ -28,12 +37,19 @@ void AObstacle::Tick(float DeltaTime)
 
 void AObstacle::OnBoxOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult)
 {
-	UE_LOG(LogTemp, Warning, TEXT("dead"));
 	auto player = Cast<ARunnerPlayerBase>(OtherActor);
 	if (player)
 	{
 		player->bIsDead = true;
-		UE_LOG(LogTemp, Warning, TEXT("Obstacle is dead"));
+		GetWorld()->GetTimerManager().ClearTimer(player->MoveComp->ScoreTimerHandle);
+	}
+}
+
+void AObstacle::OnItemEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
+{
+	if (auto Floor = Cast<AFloorTile>(OtherActor))
+	{
+		Destroy();
 	}
 }
 

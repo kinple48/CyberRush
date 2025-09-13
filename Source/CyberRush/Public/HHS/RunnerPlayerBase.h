@@ -45,5 +45,12 @@ public:
 
 	void DamageProcess();
 
+	UPROPERTY(EditAnywhere,BlueprintReadWrite)
 	bool bIsDead = false;
+
+	UPROPERTY(EditAnywhere,BlueprintReadWrite)
+	int32 TotalCoin = 0;
+
+	UPROPERTY(EditAnywhere,BlueprintReadWrite)
+	int32 CurrentCoin = 0;
 };

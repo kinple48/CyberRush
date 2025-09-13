@@ -8,23 +8,34 @@
 #include "LJW/FloorTileType1.h"
 #include "LJW/FloorTileType2.h"
 #include "LJW/MainPlayerController.h"
+#include "LJW/Obstacle.h"
+#include "LJW/EnemyBase.h"
 #include "UObject/ConstructorHelpers.h"
+#include "EngineUtils.h"
+#include "GameFramework/CharacterMovementComponent.h"
+#include "HHS/RunnerPlayerBase.h"
+#include "HHS/PlayerMoveComponent.h"
+
 
 ACyberRushGameMode::ACyberRushGameMode()
 {
-	// set default pawn class to our Blueprinted character
-	static ConstructorHelpers::FClassFinder<APawn> PlayerPawnBPClass(TEXT("/Game/ThirdPerson/Blueprints/BP_ThirdPersonCharacter"));
-	if (PlayerPawnBPClass.Class != NULL)
-	{
-		DefaultPawnClass = PlayerPawnBPClass.Class;
-	}
-
 	PlayerControllerClass = AMainPlayerController::StaticClass();
 }
 
 void ACyberRushGameMode::BeginPlay()
 {
 	Super::BeginPlay();
+
+	APlayerController* PC = UGameplayStatics::GetPlayerController(this, 0);
+	if (PC)
+	{
+		APawn* PlayerPawn = PC->GetPawn();
+		if (PlayerPawn)
+		{
+			RunnerCharacterRef = Cast<ARunnerPlayerBase>(PlayerPawn);
+		}
+	}
+
 	NextSpawnPoint.SetLocation(FVector(0, 0, 0));
 	if (StartTileClass)
 	{
@@ -39,6 +50,14 @@ void ACyberRushGameMode::BeginPlay()
 	{
 		AddFloorTile();
 	}
+
+	GetWorld()->GetTimerManager().SetTimer(
+		RunStartDelayHandle,
+		this,
+		&ACyberRushGameMode::EnableRunning,
+		3.0f,
+		false
+	);
 }
 
 void ACyberRushGameMode::AddFloorTile()
@@ -99,4 +118,81 @@ void ACyberRushGameMode::PlayerDied(AController* PlayerController)
 	}
 }
 
+void ACyberRushGameMode::RestartGameState()
+{
+	CurrentScore = 0;
 
+	// Destroy FloorTile
+	for (TActorIterator<AFloorTile> It(GetWorld()); It; ++It)
+	{
+		It->Destroy();
+	}
+
+	// Destroy Enemy
+	for (TActorIterator<AEnemyBase> It(GetWorld()); It; ++It)
+	{
+		It->Destroy();
+	}
+
+	// Destroy Obstacle
+	for (TActorIterator<AObstacle> It(GetWorld()); It; ++It)
+	{
+		It->Destroy();
+	}
+
+	NextSpawnPoint.SetLocation(FVector::ZeroVector);
+	if (StartTileClass)
+	{
+		AFloorTile* StartTile = GetWorld()->SpawnActor<AFloorTile>(StartTileClass, NextSpawnPoint);
+		if (StartTile)
+		{
+			NextSpawnPoint = StartTile->GetAttachTransform();
+		}
+	}
+	for (int32 i = 0; i < 10; i++)
+	{
+		AddFloorTile();
+	}
+
+	APlayerController* PC = UGameplayStatics::GetPlayerController(this, 0);
+	if (PC)
+	{
+		// ���� Pawn ����
+		if (APawn* OldPawn = PC->GetPawn())
+		{
+			OldPawn->Destroy();
+		}
+
+		// ���� ��ġ ����
+		FVector SpawnLocation(300.f, 0.f, 0.f);
+		FRotator SpawnRotation = FRotator::ZeroRotator;
+
+		FActorSpawnParameters SpawnParams;
+		SpawnParams.Owner = PC;
+		SpawnParams.Instigator = PC->GetPawn();
+		SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
+
+		// Pawn ���� �� Possess
+		APawn* NewPawn = GetWorld()->SpawnActor<APawn>(DefaultPawnClass, SpawnLocation, SpawnRotation, SpawnParams);
+		if (NewPawn)
+		{
+			PC->Possess(NewPawn);
+		}
+		RunnerCharacterRef = Cast<ARunnerPlayerBase>(NewPawn);
+	}
+	RunnerCharacterRef->MoveComp->bCanRun = false;
+	RunnerCharacterRef->bIsDead = false;
+	GetWorld()->GetTimerManager().SetTimer(
+		RunStartDelayHandle,
+		this,
+		&ACyberRushGameMode::EnableRunning,
+		3.0f,
+		false
+	);
+}
+
+void ACyberRushGameMode::EnableRunning()
+{
+	if (!RunnerCharacterRef) return;
+	RunnerCharacterRef->MoveComp->bCanRun = true;
+}

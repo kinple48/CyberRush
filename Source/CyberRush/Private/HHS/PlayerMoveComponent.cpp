@@ -8,6 +8,7 @@
 #include "HHS/RunnerPlayerBase.h"
 
 #include "GameFramework/CharacterMovementComponent.h"
+#include "HHS/PlayerAnimInstance.h"
 
 UPlayerMoveComponent::UPlayerMoveComponent()
 {
@@ -22,6 +23,7 @@ void UPlayerMoveComponent::BeginPlay()
 	Super::BeginPlay();
 
 	OwningCharacter = Cast<ARunnerPlayerBase>(GetOwner());
+	Anim = Cast<UPlayerAnimInstance>(OwningCharacter->GetMesh()->GetAnimInstance());
 
 	// 이동속도 조절
 	OwningCharacter->GetCharacterMovement()->MaxWalkSpeed = 1500.f;
@@ -43,8 +45,9 @@ void UPlayerMoveComponent::BeginPlay()
 			this, 
 			&UPlayerMoveComponent::AddScoreOverTime, 
 			ScoreInterval, 
-			true);
+			true, 3.5f);
 	}
+
 }
 
 
@@ -53,12 +56,11 @@ void UPlayerMoveComponent::TickComponent(float DeltaTime, ELevelTick TickType, F
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
 	// 앞으로 자동 달리기
-	if (OwningCharacter && !OwningCharacter->bIsDead)
+	if (OwningCharacter && !OwningCharacter->bIsDead && bCanRun)
 	{
 		OwningCharacter->AddMovementInput(OwningCharacter->GetActorForwardVector(), 1.0f);
+		UpdateLanePosition(DeltaTime);
 	}
-	
-	UpdateLanePosition(DeltaTime);
 
 	UCharacterMovementComponent* MoveComp = OwningCharacter->GetCharacterMovement();
 	if (MoveComp->IsFalling())
@@ -82,38 +84,40 @@ void UPlayerMoveComponent::TickComponent(float DeltaTime, ELevelTick TickType, F
 
 void UPlayerMoveComponent::MoveLeft()
 {
-	CurrentLane = FMath::Clamp(CurrentLane - 1, 0, 2);
-	UE_LOG(LogTemp, Warning, TEXT("CurrentLane: %d"), CurrentLane);
-
+	if (!OwningCharacter->GetCharacterMovement()->IsFalling() && bCanRun && CurrentLane !=0)
+	{
+		CurrentLane = FMath::Clamp(CurrentLane - 1, 0, 2);
+		OwningCharacter->PlayAnimMontage(Anim->PlayerMontage, 1.f,TEXT("Left"));
+	}
 }
 
 void UPlayerMoveComponent::MoveRight()
 {
-	CurrentLane = FMath::Clamp(CurrentLane + 1, 0, 2);
-	UE_LOG(LogTemp, Warning, TEXT("CurrentLane: %d"), CurrentLane);
-
+	if (!OwningCharacter->GetCharacterMovement()->IsFalling() && bCanRun && CurrentLane !=2)
+	{
+		CurrentLane = FMath::Clamp(CurrentLane + 1, 0, 2);
+		OwningCharacter->PlayAnimMontage(Anim->PlayerMontage, 1.f,TEXT("Right"));
+	}
 }
 
 void UPlayerMoveComponent::UpdateLanePosition(float DeltaTime)
 {
 	if (!OwningCharacter) return;
-
+	
 	FVector CurrentLocation = OwningCharacter->GetActorLocation();
 	float TargetY = (CurrentLane - 1) * LaneDistance;
 	CurrentLocation.Y = FMath::FInterpTo(CurrentLocation.Y, TargetY, DeltaTime, LaneInterpSpeed);
 	OwningCharacter->SetActorLocation(CurrentLocation);
+	
 }
 
 void UPlayerMoveComponent::Jump()
 {
 	if (!OwningCharacter) return;
 
-	// 이미 점프 중이 아닐 때만 점프
-	if (!OwningCharacter->GetCharacterMovement()->IsFalling())
+	if (!OwningCharacter->GetCharacterMovement()->IsFalling() && !OwningCharacter->bIsDead && bCanRun)
 	{
 		OwningCharacter->Jump();
-		UE_LOG(LogTemp, Warning, TEXT("Jump"));
-
 	}
 }
 
@@ -154,4 +158,3 @@ void UPlayerMoveComponent::AddScoreOverTime()
 		GetWorld()->GetTimerManager().ClearTimer(ScoreTimerHandle);
 	}
 }
-

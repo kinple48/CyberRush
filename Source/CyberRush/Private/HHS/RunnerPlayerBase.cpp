@@ -40,13 +40,6 @@
  		GunMeshComp->SetSkeletalMesh(TmpGun.Object);
  		GunMeshComp->SetRelativeLocationAndRotation(FVector(-6.705495f, -0.403527f, 2.557798f), FRotator(0.625342f, -38.782035f, 187.405683f));
 	}
- 	
-	//ConstructorHelpers::FClassFinder<UTPSPlayerAnimInstance> TempAnimInst(TEXT("/Script/Engine.AnimBlueprint'/Game/NYS/Blueprints/Anim/ABP_TPSPlayer.ABP_TPSPlayer_C'"));
-//
-	//if( TempAnimInst.Succeeded() )
-	//{
-	//	GetMesh()->SetAnimInstanceClass(TempAnimInst.Class);
-	//}
 
 	// 자동 전방 이동
 	GetCharacterMovement()->MaxWalkSpeed = 50.f;
@@ -68,7 +61,8 @@ void ARunnerPlayerBase::BeginPlay()
  		{
  			subsystem->AddMappingContext(IMC_CR, 0);
  		}
- 	}	
+ 	}
+    GetCharacterMovement()->MaxWalkSpeed = 1500.f;
 }
 
 void ARunnerPlayerBase::Tick(float DeltaTime)

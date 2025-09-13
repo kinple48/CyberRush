@@ -25,4 +25,10 @@ public:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category=PlayerAnim)
 	bool isDead = false;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category=PlayerAnim)
+	bool isRun = false;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category="PlayerAnim")
+	class UAnimMontage* PlayerMontage;
 };

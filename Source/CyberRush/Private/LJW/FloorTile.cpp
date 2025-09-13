@@ -52,17 +52,20 @@ void AFloorTile::OnBoxBeginOverlap(UPrimitiveComponent* OverlappedComponent, AAc
 	{
 		if (auto* GM = GetWorld()->GetAuthGameMode<ACyberRushGameMode>())
 		{
-			GM->AddFloorTile();
-			FTimerHandle DestroyHandle;
-			GetWorld()->GetTimerManager().SetTimer(
-				DestroyHandle,
-				[this]()
-				{
-					Destroy();
-				},
-				2.0f,
-				false
-			);
+			if (!Player->bIsDead)
+			{
+				GM->AddFloorTile();
+				FTimerHandle DestroyHandle;
+				GetWorld()->GetTimerManager().SetTimer(
+					DestroyHandle,
+					[this]()
+					{
+						Destroy();
+					},
+					2.0f,
+					false
+				);
+			}
 		}
 	}
 }

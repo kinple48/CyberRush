@@ -1,5 +1,6 @@
 SK_Mannequin T Pose
 
+https://mocaponline.com/blogs/news/a-pose-or-t-pose-conversion-ue4-retarget-manager
 
 This "SK_Mannequin.fbx" has a zeroed out T-Pose like the old 4.7 UE4 Template rig.
 (The new 4.8 rig by default is posed in an "A" with the arms/hands rotated on all axes)

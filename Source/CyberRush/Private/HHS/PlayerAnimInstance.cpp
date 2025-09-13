@@ -4,6 +4,7 @@
 #include "HHS/PlayerAnimInstance.h"
 
 #include "GameFramework/CharacterMovementComponent.h"
+#include "HHS/PlayerMoveComponent.h"
 #include "HHS/RunnerPlayerBase.h"
 
 void UPlayerAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
@@ -25,4 +26,5 @@ void UPlayerAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 	//}
 
 	isDead = player->bIsDead;
+	isRun = player->MoveComp->bCanRun;
 }

@@ -44,6 +44,7 @@ public:
 	UPROPERTY()
 	TArray<class ABullet*> Magazine;
 
+	class ARunnerPlayerBase* Player;
 	
 	void MakeBullet();    // 총알 풀 초기화
 };

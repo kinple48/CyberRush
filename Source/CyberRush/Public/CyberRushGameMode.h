@@ -49,6 +49,14 @@ public:
 	void LoadGameData();
 
 	void PlayerDied(AController* PlayerController);
+
+	UFUNCTION(BlueprintCallable)
+	void RestartGameState();
+
+	FTimerHandle RunStartDelayHandle;
+	void EnableRunning();
+	
+	class ARunnerPlayerBase* RunnerCharacterRef;
 };
 
 

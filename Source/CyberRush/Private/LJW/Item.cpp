@@ -67,6 +67,7 @@ void AItem::OnItemBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor*
 		}
 		
 		UGameplayStatics::PlaySound2D(GetWorld(),ItemSound);
+		Player->CurrentCoin += 1;
 		Destroy();
 	}
 }

@@ -8,6 +8,7 @@
 #include "Components/SphereComponent.h"
 #include "GameFramework/ProjectileMovementComponent.h"
 #include "HHS/Bullet.h"
+#include "HHS/PlayerMoveComponent.h"
 #include "HHS/RunnerPlayerBase.h"
 
 UPlayerCombatComponent::UPlayerCombatComponent()
@@ -22,8 +23,8 @@ UPlayerCombatComponent::UPlayerCombatComponent()
 void UPlayerCombatComponent::BeginPlay()
 {
 	Super::BeginPlay();
-	
-	if (ARunnerPlayerBase* Player = Cast<ARunnerPlayerBase>(GetOwner()))
+	Player = Cast<ARunnerPlayerBase>(GetOwner());
+	if (Player)
 	{
 		if (Player->GunMeshComp)
 		{
@@ -50,17 +51,10 @@ void UPlayerCombatComponent::SetupInputBinding(UEnhancedInputComponent* InputCom
 
 void UPlayerCombatComponent::Fire()
 {
-	//if (ARunnerPlayerBase* Player = Cast<ARunnerPlayerBase>(GetOwner()))
-	//{
-	//	FVector SpawnLoc = Player->GetActorLocation() + Player->GetActorForwardVector() * MuzzleOffset.X + FVector(0,0,MuzzleOffset.Z);
-	//	FRotator SpawnRot = Player->GetActorRotation();
-//
-	//	FActorSpawnParameters SpawnParams;
-	//	SpawnParams.Owner = Player;
-//
-	//	GetWorld()->SpawnActor<ABullet>(BulletClass, SpawnLoc, SpawnRot, SpawnParams);
-	//}
-	MakeBullet();
+	if (Player->MoveComp->bCanRun)
+	{
+		MakeBullet();
+	}
 }
 
 void UPlayerCombatComponent::MakeBullet()
@@ -72,7 +66,7 @@ void UPlayerCombatComponent::MakeBullet()
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Bullet #%d"), i);
 		
-		if (Magazine[i]->bIsActive == false)
+		if (Magazine[i] && Magazine[i]->bIsActive == false)
 
 		{
 			FindResult = true;
