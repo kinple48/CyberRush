@@ -29,18 +29,13 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	class UArrowComponent* EnemySponPoint2;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	class UArrowComponent* EnemySponPoint3;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	class UArrowComponent* EnemySponPoint4;
+	
 	
 	UFUNCTION()
 	void OnSensorBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult);
 
 	UPROPERTY(EditAnywhere)
-	TSubclassOf<class ABeastEnemy> EnemyFactory;
+	TSubclassOf<class AEnemyBase> EnemyFactory;
 	
 	void SpawnEnemy();
 

@@ -7,6 +7,7 @@
 #include "LJW/BeastEnemy.h"
 #include "LJW/BeastEnemyAnim.h"
 #include "Components/SphereComponent.h"
+#include "LJW/Magazine.h"
 
 UBeastEnemyFSM::UBeastEnemyFSM()
 {
@@ -99,6 +100,18 @@ void UBeastEnemyFSM::OnDamageProcess(int32 damage)
 		me->GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 		me->CollisionRange->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 		me->PlayAnimMontage(Anim->EnemyMontage, 1.f,TEXT("Die"));
+		const float DropChance = 0.3f; // 30%
+		if (FMath::FRand() <= DropChance && MagazineFactory)
+		{
+			FVector SpawnLocation = me->GetActorLocation();
+			FRotator SpawnRotation = FRotator::ZeroRotator;
+
+			FActorSpawnParameters SpawnParams;
+			SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
+
+			GetWorld()->SpawnActor<AMagazine>(MagazineFactory, SpawnLocation, SpawnRotation, SpawnParams);
+		}
+		
 	}
 	Anim->AnimState = mstate;
 }

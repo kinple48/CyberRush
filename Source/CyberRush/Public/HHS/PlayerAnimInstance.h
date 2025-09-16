@@ -29,6 +29,27 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category=PlayerAnim)
 	bool isRun = false;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category="PlayerAnim")
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category=PlayerAnim)
 	class UAnimMontage* PlayerMontage;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category=PlayerAnim)
+	bool isAttack = false;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category=PlayerAnim)
+	bool isReloading = false;
+
+	UFUNCTION()
+	void AnimNotify_Reload();
+
+	UFUNCTION()
+	void AnimNotify_Move_L_Start();
+
+	UFUNCTION()
+	void AnimNotify_Move_L_End();
+
+	UFUNCTION()
+	void AnimNotify_Move_R_Start();
+
+	UFUNCTION()
+	void AnimNotify_Move_R_End();
 };

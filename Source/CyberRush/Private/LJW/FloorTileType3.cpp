@@ -26,16 +26,6 @@ AFloorTileType3::AFloorTileType3()
 	EnemySponPoint2->SetupAttachment(Scenecomp);
 	EnemySponPoint2->SetRelativeLocation(FVector(1400.0f,350.0f,0.0f));
 	EnemySponPoint2->SetRelativeRotation(FRotator(0.0f,210.0f,0.0f));
-	
-	EnemySponPoint3 = CreateDefaultSubobject<UArrowComponent>(TEXT("EnemySponPoint3"));
-	EnemySponPoint3->SetupAttachment(Scenecomp);
-	EnemySponPoint3->SetRelativeLocation(FVector(1800.0f,-350.0f,0.0f));
-	EnemySponPoint3->SetRelativeRotation(FRotator(0.0f,150.0f,0.0f));
-	
-	EnemySponPoint4 = CreateDefaultSubobject<UArrowComponent>(TEXT("EnemySponPoint4"));
-	EnemySponPoint4->SetupAttachment(Scenecomp);
-	EnemySponPoint4->SetRelativeLocation(FVector(1800.0f,350.0f,0.0f));
-	EnemySponPoint4->SetRelativeRotation(FRotator(0.0f,210.0f,0.0f));
 }
 
 void AFloorTileType3::BeginPlay()
@@ -56,6 +46,6 @@ void AFloorTileType3::SpawnEnemy()
 {
 	FActorSpawnParameters SpawnParams;
 	SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
-	GetWorld()->SpawnActor<ABeastEnemy>(EnemyFactory, EnemySponPoint1->GetComponentTransform(), SpawnParams);
-	GetWorld()->SpawnActor<ABeastEnemy>(EnemyFactory, EnemySponPoint2->GetComponentTransform(), SpawnParams);
+	GetWorld()->SpawnActor<AEnemyBase>(EnemyFactory, EnemySponPoint1->GetComponentTransform(), SpawnParams);
+	GetWorld()->SpawnActor<AEnemyBase>(EnemyFactory, EnemySponPoint2->GetComponentTransform(), SpawnParams);
 }

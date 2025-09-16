@@ -42,4 +42,8 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Runner|Score")
 	int32 ScoreOnHit = 100;
+
+	FTimerHandle BulletLifeTimer;
+	void Deactivate();
 };
+

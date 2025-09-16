@@ -15,7 +15,6 @@ AEnemyBase::AEnemyBase()
 {
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
-	FSM = CreateDefaultSubobject<UBeastEnemyFSM>(TEXT("FSM"));
 
 	CollisionRange = CreateDefaultSubobject<USphereComponent>(TEXT("CollisionRange"));
 	CollisionRange->SetupAttachment(RootComponent);

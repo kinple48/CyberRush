@@ -4,10 +4,12 @@
 #include "LJW/BeastEnemy.h"
 
 #include "Components/SphereComponent.h"
+#include "LJW/BeastEnemyFSM.h"
 
 ABeastEnemy::ABeastEnemy()
 {
 	PrimaryActorTick.bCanEverTick = true;
+	FSM = CreateDefaultSubobject<UBeastEnemyFSM>(TEXT("FSM"));
 	CollisionRange->SetSphereRadius(80.f);
 }
 

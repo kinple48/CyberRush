@@ -22,8 +22,6 @@ public:
 
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 	
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = FSMComponent)
-	class UBeastEnemyFSM* FSM;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	class USphereComponent* CollisionRange;

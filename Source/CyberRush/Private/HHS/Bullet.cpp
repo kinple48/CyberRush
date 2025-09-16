@@ -41,8 +41,7 @@ void ABullet::BeginPlay()
 	
 }
 
-void ABullet::OnOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp,
-	int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+void ABullet::OnOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
 	if (AEnemyBase* Enemy = Cast<AEnemyBase>(OtherActor))
 	{
@@ -58,23 +57,33 @@ void ABullet::OnOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherA
 		{
 			enemyFSM->OnDamageProcess(1);
 		}
-		Destroy();
+		SetActive(false);
 	}
 }
 
 void ABullet::SetActive(bool bValue)
 {
 	bIsActive = bValue;
-	UE_LOG(LogTemp, Warning, TEXT("SetActive called with %d, bIsActive now %d"), bValue, bIsActive);
-
-	
 	BulletMesh->SetVisibility( bValue );
 	if( bValue )
 	{
 		CollisionComp->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+		GetWorld()->GetTimerManager().SetTimer(
+			BulletLifeTimer,
+			this,
+			&ABullet::Deactivate,
+			1.0f,
+			false
+		);
 	}
 	else
 	{		
 		CollisionComp->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+		GetWorld()->GetTimerManager().ClearTimer(BulletLifeTimer);
 	}
+}
+
+void ABullet::Deactivate()
+{
+	SetActive(false);
 }

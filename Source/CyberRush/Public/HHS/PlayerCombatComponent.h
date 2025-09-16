@@ -45,6 +45,29 @@ public:
 	TArray<class ABullet*> Magazine;
 
 	class ARunnerPlayerBase* Player;
+	class UPlayerAnimInstance* Anim;
 	
 	void MakeBullet();    // 총알 풀 초기화
+
+	FTimerHandle AttackStateResetTimer;
+	float AttackResetTime = 3.0f;
+	void ResetAttack();
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Combat")
+	int32 MagazineAmmo;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Combat")
+	int32 maxMagazineAmmo = 8;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Combat")
+	int32 ReserveAmmo;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Combat")
+	int32 maxReserveAmmo = 32;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Combat")
+	bool isMoving = false;
+
+	UFUNCTION(BlueprintCallable)
+	void ReloadGun();
 };

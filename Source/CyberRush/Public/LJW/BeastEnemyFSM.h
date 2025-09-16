@@ -58,4 +58,6 @@ public:
 	{
 		bDieDone = true;
 	}
+
+	UPROPERTY(EditAnywhere, Category = "Spawning") TSubclassOf<class AMagazine> MagazineFactory;
 };

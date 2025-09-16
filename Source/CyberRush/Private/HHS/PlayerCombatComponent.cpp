@@ -8,6 +8,7 @@
 #include "Components/SphereComponent.h"
 #include "GameFramework/ProjectileMovementComponent.h"
 #include "HHS/Bullet.h"
+#include "HHS/PlayerAnimInstance.h"
 #include "HHS/PlayerMoveComponent.h"
 #include "HHS/RunnerPlayerBase.h"
 
@@ -24,6 +25,7 @@ void UPlayerCombatComponent::BeginPlay()
 {
 	Super::BeginPlay();
 	Player = Cast<ARunnerPlayerBase>(GetOwner());
+	Anim = Cast<UPlayerAnimInstance>(Player->GetMesh()->GetAnimInstance());
 	if (Player)
 	{
 		if (Player->GunMeshComp)
@@ -42,6 +44,9 @@ void UPlayerCombatComponent::BeginPlay()
 		bullet->SetActive(false);
 		Magazine.Add(bullet);
 	}
+
+	MagazineAmmo = maxMagazineAmmo;
+	ReserveAmmo = maxReserveAmmo;
 }
 
 void UPlayerCombatComponent::SetupInputBinding(UEnhancedInputComponent* InputComponent)
@@ -51,9 +56,29 @@ void UPlayerCombatComponent::SetupInputBinding(UEnhancedInputComponent* InputCom
 
 void UPlayerCombatComponent::Fire()
 {
-	if (Player->MoveComp->bCanRun)
+	if (Player->MoveComp->bCanRun && !isMoving)
 	{
-		MakeBullet();
+		Anim->isAttack = true;
+		GetWorld()->GetTimerManager().ClearTimer(AttackStateResetTimer);
+		GetWorld()->GetTimerManager().SetTimer(
+			AttackStateResetTimer,
+			this,
+			&UPlayerCombatComponent::ResetAttack,
+			AttackResetTime,
+			false
+		);
+		if (MagazineAmmo > 0)
+		{
+			MakeBullet();
+			MagazineAmmo--;
+		}
+		else
+		{
+			if (ReserveAmmo > 0)
+			{
+				Anim->isReloading = true;
+			}
+		}
 	}
 }
 
@@ -77,9 +102,28 @@ void UPlayerCombatComponent::MakeBullet()
 			break;
 		}
 	}
+}
 
-	if( FindResult == false )
+void UPlayerCombatComponent::ResetAttack()
+{
+	if (Anim)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("활성화된 총알 없음"));
+		Anim->isAttack = false;
 	}
+}
+
+void UPlayerCombatComponent::ReloadGun()
+{
+	int32 AmmoNeeded = maxMagazineAmmo - MagazineAmmo;
+
+	int32 AmmoToReload = FMath::Min(AmmoNeeded, ReserveAmmo);
+
+		
+	if (AmmoNeeded <= 0 || ReserveAmmo <= 0 || AmmoToReload <= 0)
+	{
+		return;
+	}
+		
+	MagazineAmmo += AmmoToReload;
+	ReserveAmmo -= AmmoToReload;
 }

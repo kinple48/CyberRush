@@ -4,6 +4,7 @@
 #include "HHS/PlayerAnimInstance.h"
 
 #include "GameFramework/CharacterMovementComponent.h"
+#include "HHS/PlayerCombatComponent.h"
 #include "HHS/PlayerMoveComponent.h"
 #include "HHS/RunnerPlayerBase.h"
 
@@ -16,15 +17,60 @@ void UPlayerAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 	{
 		return;
 	}
-
-
+	
 	IsInAir = player->GetCharacterMovement()->IsFalling();
-	//auto movement = player->GetCharacterMovement();
-	//if( movement != nullptr )
-	//{
-	//	IsInAir = movement->IsFalling();
-	//}
-
 	isDead = player->bIsDead;
 	isRun = player->MoveComp->bCanRun;
+}
+
+void UPlayerAnimInstance::AnimNotify_Reload()
+{
+	ARunnerPlayerBase* player = Cast<ARunnerPlayerBase>(TryGetPawnOwner());
+	if( player == nullptr )
+	{
+		return;
+	}
+	
+	isReloading = false;
+	player->CombatComp->ReloadGun();
+}
+
+void UPlayerAnimInstance::AnimNotify_Move_L_Start()
+{
+	ARunnerPlayerBase* player = Cast<ARunnerPlayerBase>(TryGetPawnOwner());
+	if( player == nullptr )
+	{
+		return;
+	}
+	player->CombatComp->isMoving = true;
+}
+
+void UPlayerAnimInstance::AnimNotify_Move_L_End()
+{
+	ARunnerPlayerBase* player = Cast<ARunnerPlayerBase>(TryGetPawnOwner());
+	if( player == nullptr )
+	{
+		return;
+	}
+	player->CombatComp->isMoving = false;
+}
+
+void UPlayerAnimInstance::AnimNotify_Move_R_Start()
+{
+	ARunnerPlayerBase* player = Cast<ARunnerPlayerBase>(TryGetPawnOwner());
+	if( player == nullptr )
+	{
+		return;
+	}
+	player->CombatComp->isMoving = true;
+}
+
+void UPlayerAnimInstance::AnimNotify_Move_R_End()
+{
+	ARunnerPlayerBase* player = Cast<ARunnerPlayerBase>(TryGetPawnOwner());
+	if( player == nullptr )
+	{
+		return;
+	}
+	player->CombatComp->isMoving = false;
 }
