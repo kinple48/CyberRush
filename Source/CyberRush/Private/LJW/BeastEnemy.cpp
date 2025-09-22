@@ -5,6 +5,10 @@
 
 #include "Components/SphereComponent.h"
 #include "LJW/BeastEnemyFSM.h"
+#include "LJW/FloorTile.h"
+#include "Components/BoxComponent.h"
+#include "HHS/PlayerMoveComponent.h"
+#include "HHS/RunnerPlayerBase.h"
 
 ABeastEnemy::ABeastEnemy()
 {
@@ -16,7 +20,8 @@ ABeastEnemy::ABeastEnemy()
 void ABeastEnemy::BeginPlay()
 {
 	Super::BeginPlay();
-	
+	CollisionRange->OnComponentBeginOverlap.AddDynamic(this, &ABeastEnemy::OnCollisionRangeBeginOverlap);
+	boxcomp->OnComponentEndOverlap.AddDynamic(this, &ABeastEnemy::OnItemEndOverlap);
 }
 
 void ABeastEnemy::Tick(float DeltaTime)
@@ -31,3 +36,21 @@ void ABeastEnemy::SetupPlayerInputComponent(UInputComponent* PlayerInputComponen
 	
 }
 
+void ABeastEnemy::OnCollisionRangeBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+{
+	auto player = Cast<ARunnerPlayerBase>(OtherActor);
+	if (player)
+	{
+		player->bIsDead = true;
+		GetWorld()->GetTimerManager().ClearTimer(player->MoveComp->ScoreTimerHandle);
+		Destroy();
+	}
+}
+
+void ABeastEnemy::OnItemEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
+{
+	if (auto Floor = Cast<AFloorTile>(OtherActor))
+	{
+		Destroy();
+	}
+}

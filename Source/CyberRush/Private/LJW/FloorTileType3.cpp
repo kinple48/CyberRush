@@ -6,8 +6,7 @@
 #include "Components/ArrowComponent.h"
 #include "Components/BoxComponent.h"
 #include "HHS/RunnerPlayerBase.h"
-#include "LJW/BeastEnemy.h"
-//#include "LJW/EnemyBase.h"
+#include "LJW/EnemyBase.h"
 
 AFloorTileType3::AFloorTileType3()
 {

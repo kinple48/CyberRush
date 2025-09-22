@@ -33,9 +33,6 @@ void UBeastEnemyFSM::BeginPlay()
 void UBeastEnemyFSM::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
-
-	FString logMsg = UEnum::GetValueAsString(mstate);
-	GEngine->AddOnScreenDebugMessage(0, 1.f, FColor::Red, logMsg);
 	
 	switch (mstate)
 	{
@@ -105,7 +102,6 @@ void UBeastEnemyFSM::OnDamageProcess(int32 damage)
 		{
 			FVector SpawnLocation = me->GetActorLocation();
 			FRotator SpawnRotation = FRotator::ZeroRotator;
-
 			FActorSpawnParameters SpawnParams;
 			SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
 

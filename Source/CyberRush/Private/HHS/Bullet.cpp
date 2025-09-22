@@ -8,6 +8,8 @@
 #include "GameFramework/ProjectileMovementComponent.h"
 #include "LJW/BeastEnemy.h"
 #include "LJW/BeastEnemyFSM.h"
+#include "LJW/DroneEnemy.h"
+#include "LJW/DroneEnemyFSM.h"
 #include "LJW/EnemyBase.h"
 //#include "LJW/EnemyBase.h"
 //#include "LJW/EnemyFSM.h"
@@ -51,11 +53,21 @@ void ABullet::OnOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherA
 		{
 			GameMode->AddScore(ScoreOnHit);
 		}
-		
-		UBeastEnemyFSM* enemyFSM = Enemy->FindComponentByClass<UBeastEnemyFSM>();
-		if (enemyFSM)
+		if (ABeastEnemy* BeastType = Cast<ABeastEnemy>(Enemy))
 		{
-			enemyFSM->OnDamageProcess(1);
+			UBeastEnemyFSM* enemyFSM = Enemy->FindComponentByClass<UBeastEnemyFSM>();
+			if (enemyFSM)
+			{
+				enemyFSM->OnDamageProcess(1);
+			}
+		}
+		if (ADroneEnemy* DroneType = Cast<ADroneEnemy>(Enemy))
+		{
+			UDroneEnemyFSM* enemyFSM = Enemy->FindComponentByClass<UDroneEnemyFSM>();
+			if (enemyFSM)
+			{
+				enemyFSM->OnDamageProcess(1);
+			}
 		}
 		SetActive(false);
 	}

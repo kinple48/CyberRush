@@ -28,8 +28,6 @@ AEnemyBase::AEnemyBase()
 void AEnemyBase::BeginPlay()
 {
 	Super::BeginPlay();
-	CollisionRange->OnComponentBeginOverlap.AddDynamic(this, &AEnemyBase::OnCollisionRangeBeginOverlap);
-	boxcomp->OnComponentEndOverlap.AddDynamic(this, &AEnemyBase::OnItemEndOverlap);
 }
 
 void AEnemyBase::Tick(float DeltaTime)
@@ -42,25 +40,6 @@ void AEnemyBase::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
-}
-
-void AEnemyBase::OnCollisionRangeBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
-{
-	auto player = Cast<ARunnerPlayerBase>(OtherActor);
-	if (player)
-	{
-		player->bIsDead = true;
-		GetWorld()->GetTimerManager().ClearTimer(player->MoveComp->ScoreTimerHandle);
-		Destroy();
-	}
-}
-
-void AEnemyBase::OnItemEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
-{
-	if (auto Floor = Cast<AFloorTile>(OtherActor))
-	{
-		Destroy();
-	}
 }
 
 
