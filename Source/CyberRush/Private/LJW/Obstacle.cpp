@@ -40,8 +40,7 @@ void AObstacle::OnBoxOverlap(UPrimitiveComponent* OverlappedComponent, AActor* O
 	auto player = Cast<ARunnerPlayerBase>(OtherActor);
 	if (player)
 	{
-		player->bIsDead = true;
-		GetWorld()->GetTimerManager().ClearTimer(player->MoveComp->ScoreTimerHandle);
+		player->DamageProcess();
 	}
 }
 

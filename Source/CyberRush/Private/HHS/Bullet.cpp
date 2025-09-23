@@ -25,11 +25,10 @@ ABullet::ABullet()
 
 	BulletMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("BulletMesh"));
 	BulletMesh->SetupAttachment(CollisionComp);
-	//BulletMesh->SetRelativeScale3D(FVector(0.2f)); // 작게 조정
 	
 	BulletMovement = CreateDefaultSubobject<UProjectileMovementComponent>(TEXT("ProjectileComp"));
-	BulletMovement->InitialSpeed = 3000.f;
-	BulletMovement->MaxSpeed = 3000.f;
+	BulletMovement->InitialSpeed = 4000.f;
+	BulletMovement->MaxSpeed = 4000.f;
 	BulletMovement->bRotationFollowsVelocity = true;
 	BulletMovement->ProjectileGravityScale = 0.f; 
 
@@ -76,21 +75,26 @@ void ABullet::OnOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherA
 void ABullet::SetActive(bool bValue)
 {
 	bIsActive = bValue;
-	BulletMesh->SetVisibility( bValue );
-	if( bValue )
+	bIsActive = bValue;
+
+	if (BulletMesh)
 	{
-		CollisionComp->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
-		GetWorld()->GetTimerManager().SetTimer(
-			BulletLifeTimer,
-			this,
-			&ABullet::Deactivate,
-			1.0f,
-			false
-		);
+		BulletMesh->SetVisibility(bValue);
 	}
-	else
-	{		
-		CollisionComp->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+
+	if (CollisionComp)
+	{
+		CollisionComp->SetCollisionEnabled(bValue ? ECollisionEnabled::QueryAndPhysics
+												  : ECollisionEnabled::NoCollision);
+	}
+
+	if (bValue && GetWorld())
+	{
+		GetWorld()->GetTimerManager().SetTimer(
+			BulletLifeTimer, this, &ABullet::Deactivate, 1.5f, false);
+	}
+	else if (GetWorld())
+	{
 		GetWorld()->GetTimerManager().ClearTimer(BulletLifeTimer);
 	}
 }

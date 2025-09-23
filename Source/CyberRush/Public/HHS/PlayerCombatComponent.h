@@ -70,4 +70,24 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	void ReloadGun();
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Sound")
+	class USoundBase* FireSound;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Sound")
+	class USoundBase* EmptySound;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Sound")
+	class USoundBase* ReloadSound;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Combat")
+	bool IsReloading = false;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Combat")
+	float FireRate = 0.3f;
+	
+	FTimerHandle FireCooldownTimer;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Combat")
+	bool bCanFire = true;
 };

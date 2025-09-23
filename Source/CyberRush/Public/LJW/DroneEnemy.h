@@ -20,10 +20,13 @@ protected:
 public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = FSMComponent)
 	class UDroneEnemyFSM* FSM;
-
+	
 	UPROPERTY(VisibleAnywhere, Category = "Reticle")
 	UDecalComponent* ReticleDecal;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Reticle")
 	UMaterialInterface* ReticleMaterial;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Sound")
+	class USoundBase* FireSound;
 };

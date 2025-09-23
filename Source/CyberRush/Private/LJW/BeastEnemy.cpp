@@ -9,6 +9,7 @@
 #include "Components/BoxComponent.h"
 #include "HHS/PlayerMoveComponent.h"
 #include "HHS/RunnerPlayerBase.h"
+#include "Kismet/GameplayStatics.h"
 
 ABeastEnemy::ABeastEnemy()
 {
@@ -41,8 +42,9 @@ void ABeastEnemy::OnCollisionRangeBeginOverlap(UPrimitiveComponent* OverlappedCo
 	auto player = Cast<ARunnerPlayerBase>(OtherActor);
 	if (player)
 	{
-		player->bIsDead = true;
-		GetWorld()->GetTimerManager().ClearTimer(player->MoveComp->ScoreTimerHandle);
+		player->DamageProcess();
+		UGameplayStatics::PlaySound2D(GetWorld(), ExplosionSound);
+		UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), ExplosionVFX, GetActorLocation());
 		Destroy();
 	}
 }

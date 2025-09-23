@@ -60,7 +60,7 @@ void UDroneEnemyFSM::IdleState()
 	float TargetY = Current.Y;
 	float TargetZ = 370.f;
 	FVector Target(TargetX, TargetY, TargetZ);
-	FVector NewLoc = FMath::VInterpTo(Current, Target, GetWorld()->GetDeltaSeconds(), 10.0f);
+	FVector NewLoc = FMath::VInterpTo(Current, Target, GetWorld()->GetDeltaSeconds(), 3.0f);
 	Me->SetActorLocation(NewLoc);
 	if (FMath::IsNearlyEqual(NewLoc.Z, 370.f, 1.0f))
 	{
@@ -98,7 +98,7 @@ void UDroneEnemyFSM::MoveState()
 
 void UDroneEnemyFSM::AttackState()
 {
-	if (!target || !Me || !RocketFactory) return;
+	if (!target || !Me || !RocketFactory || target->bIsDead) return;
 	SetReticleVisible(true);
 	FVector CurrentLoc = Me->GetActorLocation();
 	FVector PlayerLoc = target->GetActorLocation();
@@ -113,7 +113,7 @@ void UDroneEnemyFSM::AttackState()
 	
 	ElapsedAttackTime += GetWorld()->GetDeltaSeconds();
 
-	if (bHasFiredRocket && ElapsedAttackTime >= 1.0f)
+	if (bHasFiredRocket && ElapsedAttackTime >= 0.5f)
 	{
 		FVector FireStart = Me->GetActorLocation();
 
@@ -129,6 +129,7 @@ void UDroneEnemyFSM::AttackState()
 		SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
 
 		ARocket* Rocket = GetWorld()->SpawnActor<ARocket>(RocketFactory, FireStart, FireRotation, SpawnParams);
+		UGameplayStatics::PlaySound2D(GetWorld(), Me->FireSound);
 		if (Rocket)
 		{
 			Rocket->Init(FireDirection);
@@ -150,10 +151,14 @@ void UDroneEnemyFSM::DieState()
 
 void UDroneEnemyFSM::OnDamageProcess(int32 damage)
 {
-	hp -= damage;
 	if (hp <= 0)
 	{
 		mstate = EDroneState::Die;
+	}
+	else
+	{
+		hp -= damage;
+		UGameplayStatics::PlaySound2D(GetWorld(),HitSound);
 	}
 }
 
@@ -170,7 +175,6 @@ void UDroneEnemyFSM::SetReticleVisible(bool bVisible)
 
 float UDroneEnemyFSM::GetNearestLaneY(float PlayerY)
 {
-	// 레인 위치 배열
 	TArray<float> LaneYs = { -250.f, 0.f, 250.f };
 
 	float ClosestY = LaneYs[0];
@@ -186,20 +190,4 @@ float UDroneEnemyFSM::GetNearestLaneY(float PlayerY)
 		}
 	}
 	return ClosestY;
-}
-
-void UDroneEnemyFSM::FireRocket()
-{
-	if (!Me || !RocketFactory) return;
-
-	// 드론 기준 로컬 위치 → 월드 위치 변환
-	FVector RelativeLoc(-1800.f, 0.f, -380.f);
-	FVector SpawnLocation = Me->GetActorTransform().TransformPosition(RelativeLoc);
-
-	FRotator SpawnRotation = FRotationMatrix::MakeFromX(FVector(1, 0, -0.2f)).Rotator();
-
-	FActorSpawnParameters SpawnParams;
-	SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
-
-	GetWorld()->SpawnActor<ARocket>(RocketFactory, SpawnLocation, SpawnRotation, SpawnParams);
 }

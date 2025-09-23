@@ -9,6 +9,7 @@
 
 #include "GameFramework/CharacterMovementComponent.h"
 #include "HHS/PlayerAnimInstance.h"
+#include "Kismet/GameplayStatics.h"
 
 UPlayerMoveComponent::UPlayerMoveComponent()
 {
@@ -84,8 +85,10 @@ void UPlayerMoveComponent::TickComponent(float DeltaTime, ELevelTick TickType, F
 
 void UPlayerMoveComponent::MoveLeft()
 {
-	if (!OwningCharacter->GetCharacterMovement()->IsFalling() && bCanRun && CurrentLane !=0)
+	if (bCanChangeLane&&!OwningCharacter->GetCharacterMovement()->IsFalling() && bCanRun && CurrentLane !=0)
 	{
+		bCanChangeLane = false;
+		GetWorld()->GetTimerManager().SetTimer(LaneCooldownHandle, this, &UPlayerMoveComponent::ResetLaneCooldown, LaneChangeCooldown, false);
 		CurrentLane = FMath::Clamp(CurrentLane - 1, 0, 2);
 		OwningCharacter->PlayAnimMontage(Anim->PlayerMontage, 1.f,TEXT("Left"));
 	}
@@ -93,8 +96,10 @@ void UPlayerMoveComponent::MoveLeft()
 
 void UPlayerMoveComponent::MoveRight()
 {
-	if (!OwningCharacter->GetCharacterMovement()->IsFalling() && bCanRun && CurrentLane !=2)
+	if (bCanChangeLane&&!OwningCharacter->GetCharacterMovement()->IsFalling() && bCanRun && CurrentLane !=2)
 	{
+		bCanChangeLane = false;
+		GetWorld()->GetTimerManager().SetTimer(LaneCooldownHandle, this, &UPlayerMoveComponent::ResetLaneCooldown, LaneChangeCooldown, false);
 		CurrentLane = FMath::Clamp(CurrentLane + 1, 0, 2);
 		OwningCharacter->PlayAnimMontage(Anim->PlayerMontage, 1.f,TEXT("Right"));
 	}
@@ -117,22 +122,9 @@ void UPlayerMoveComponent::Jump()
 
 	if (!OwningCharacter->GetCharacterMovement()->IsFalling() && !OwningCharacter->bIsDead && bCanRun)
 	{
+		UGameplayStatics::PlaySound2D(GetWorld(), JumpSound);
 		OwningCharacter->Jump();
 	}
-}
-
-void UPlayerMoveComponent::SlideStart()
-{
-	if(!OwningCharacter) return;
-
-	OwningCharacter->Crouch();
-}
-
-void UPlayerMoveComponent::SlideEnd()
-{
-	if(!OwningCharacter) return;
-
-	OwningCharacter->UnCrouch();
 }
 
 void UPlayerMoveComponent::SetupInputBinding(UEnhancedInputComponent* InputComponent)
@@ -140,10 +132,6 @@ void UPlayerMoveComponent::SetupInputBinding(UEnhancedInputComponent* InputCompo
 	InputComponent->BindAction(IA_MoveLeft, ETriggerEvent::Started, this, &UPlayerMoveComponent::MoveLeft);
 	InputComponent->BindAction(IA_MoveRight, ETriggerEvent::Started, this, &UPlayerMoveComponent::MoveRight);
 	InputComponent->BindAction(IA_Jump, ETriggerEvent::Started, this, &UPlayerMoveComponent::Jump);
-	//InputComponent->BindAction(IA_Slide, ETriggerEvent::Started, this, &UPlayerMoveComponent::SlideStart);
-	//InputComponent->BindAction(IA_Slide, ETriggerEvent::Completed, this, &UPlayerMoveComponent::SlideEnd);
-	
-
 }
 
 void UPlayerMoveComponent::AddScoreOverTime()
@@ -158,3 +146,9 @@ void UPlayerMoveComponent::AddScoreOverTime()
 		GetWorld()->GetTimerManager().ClearTimer(ScoreTimerHandle);
 	}
 }
+
+void UPlayerMoveComponent::ResetLaneCooldown()
+{
+	bCanChangeLane = true;
+}
+

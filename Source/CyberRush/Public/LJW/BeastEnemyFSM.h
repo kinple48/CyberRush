@@ -60,4 +60,7 @@ public:
 	}
 
 	UPROPERTY(EditAnywhere, Category = "Spawning") TSubclassOf<class AMagazine> MagazineFactory;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Sound")
+	class USoundBase* HitSound;
 };

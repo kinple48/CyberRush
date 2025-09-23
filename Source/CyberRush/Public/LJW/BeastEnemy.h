@@ -31,4 +31,10 @@ public:
 
 	UFUNCTION()
 	void OnItemEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Sound")
+	class USoundBase* ExplosionSound;
+
+	UPROPERTY(EditAnywhere, Category = "Effect")
+	class UParticleSystem* ExplosionVFX;
 };

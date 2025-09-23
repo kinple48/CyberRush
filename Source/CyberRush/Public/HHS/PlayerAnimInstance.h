@@ -52,4 +52,10 @@ public:
 
 	UFUNCTION()
 	void AnimNotify_Move_R_End();
+
+	UFUNCTION()
+	void AnimNotify_footstep1();
+
+	UFUNCTION()
+	void AnimNotify_footstep2();
 };

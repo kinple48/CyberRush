@@ -39,9 +39,6 @@ public:
 
 	void Jump();
 
-	void SlideStart();
-	void SlideEnd();
-	
 private:
 	UPROPERTY()
 	ARunnerPlayerBase* OwningCharacter;
@@ -84,4 +81,14 @@ public:
 
 	UPROPERTY()
 	class UPlayerAnimInstance* Anim;
+
+	FTimerHandle LaneCooldownHandle;
+    
+    bool bCanChangeLane = true;
+    float LaneChangeCooldown = 0.4f;
+
+	void ResetLaneCooldown();
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Sound")
+	class USoundBase* JumpSound;
 };

@@ -50,7 +50,7 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = FSM)
 	int32 hp = 4;
 	
-	float AttackDelayTime = 3.0f;
+	float AttackDelayTime = 2.0f;
 	float ElapsedTimeInMove = 0.0f;
 
 	void SetReticleVisible(bool bVisible);
@@ -63,4 +63,7 @@ public:
 	TSubclassOf<class ARocket> RocketFactory;
 
 	void FireRocket();
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Sound")
+	class USoundBase* HitSound;
 };

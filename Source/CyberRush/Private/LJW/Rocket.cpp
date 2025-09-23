@@ -3,9 +3,12 @@
 
 #include "LJW/Rocket.h"
 
+#include "Components/BoxComponent.h"
+#include "Components/DecalComponent.h"
 #include "Components/SphereComponent.h"
 #include "HHS/PlayerMoveComponent.h"
 #include "HHS/RunnerPlayerBase.h"
+#include "Kismet/GameplayStatics.h"
 #include "LJW/FloorTile.h"
 
 // Sets default values
@@ -25,6 +28,13 @@ void ARocket::BeginPlay()
 {
 	Super::BeginPlay();
 	CollisionComp->OnComponentBeginOverlap.AddDynamic(this, &ARocket::OnOverlap);
+	GetWorld()->GetTimerManager().SetTimer(
+	   AutoDestroyHandle,
+	   this,
+	   &ARocket::SelfDestruct,
+	   0.55f,
+	   false
+   );
 }
 
 void ARocket::Tick(float DeltaTime)
@@ -35,6 +45,9 @@ void ARocket::Tick(float DeltaTime)
 	{
 		FVector NewLocation = GetActorLocation() + MoveDirection * Speed * DeltaTime;
 		SetActorLocation(NewLocation);
+		FRotator FireRotation = MoveDirection.Rotation();
+		FireRotation.Pitch -= 0.3f;
+		MoveDirection = FireRotation.Vector();
 	}
 }
 
@@ -42,18 +55,23 @@ void ARocket::OnOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherA
 {
 	if (ARunnerPlayerBase* player = Cast<ARunnerPlayerBase>(OtherActor))
 	{
-		player->bIsDead = true;
-		GetWorld()->GetTimerManager().ClearTimer(player->MoveComp->ScoreTimerHandle);
+		player->DamageProcess();
+		UGameplayStatics::PlaySound2D(GetWorld(), ExplosionSound);
+		UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), ExplosionVFX, GetActorLocation());
 		Destroy();
 	}
-	else if (AFloorTile* floor = Cast<AFloorTile>(OtherActor))
-	{
-		Destroy();
-	}
+	
 }
 
 void ARocket::Init(FVector InDirection)
 {
 	MoveDirection = InDirection;
+}
+
+void ARocket::SelfDestruct()
+{
+	UGameplayStatics::PlaySound2D(GetWorld(), ExplosionSound);
+	UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), ExplosionVFX, GetActorLocation());
+	Destroy();
 }
 

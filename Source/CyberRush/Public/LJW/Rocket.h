@@ -38,4 +38,12 @@ public:
 
 	FVector MoveDirection;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Sound")
+	class USoundBase* ExplosionSound;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Effect")
+	class UParticleSystem* ExplosionVFX;
+	
+	FTimerHandle AutoDestroyHandle;
+	void SelfDestruct();
 };

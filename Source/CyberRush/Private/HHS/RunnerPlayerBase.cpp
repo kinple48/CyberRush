@@ -6,9 +6,12 @@
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
 #include "Camera/CameraComponent.h"
+#include "Components/AudioComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "HHS/PlayerCombatComponent.h"
 #include "HHS/PlayerMoveComponent.h"
+#include "Kismet/GameplayStatics.h"
+#include "LJW/CyberRushGameInstance.h"
 
  ARunnerPlayerBase::ARunnerPlayerBase()
 {
@@ -90,4 +93,11 @@ void ARunnerPlayerBase::SetupPlayerInputComponent(UInputComponent* PlayerInputCo
 void ARunnerPlayerBase::DamageProcess()
 {
  	bIsDead = true;
+ 	GetWorld()->GetTimerManager().ClearTimer(MoveComp->ScoreTimerHandle);
+ 	UGameplayStatics::PlaySound2D(GetWorld(), DeathSound);
+ 	UCyberRushGameInstance* GI = Cast<UCyberRushGameInstance>(UGameplayStatics::GetGameInstance(this));
+ 	if (GI && GI->BGM_AudioComponent)
+ 	{
+ 		GI->BGM_AudioComponent->Stop();
+ 	}
 }

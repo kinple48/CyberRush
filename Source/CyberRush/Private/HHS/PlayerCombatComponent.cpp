@@ -11,6 +11,7 @@
 #include "HHS/PlayerAnimInstance.h"
 #include "HHS/PlayerMoveComponent.h"
 #include "HHS/RunnerPlayerBase.h"
+#include "Kismet/GameplayStatics.h"
 
 UPlayerCombatComponent::UPlayerCombatComponent()
 {
@@ -56,6 +57,18 @@ void UPlayerCombatComponent::SetupInputBinding(UEnhancedInputComponent* InputCom
 
 void UPlayerCombatComponent::Fire()
 {
+	if (!bCanFire || Player->bIsDead || IsReloading) return;
+	bCanFire = false;
+	GetWorld()->GetTimerManager().SetTimer(
+		FireCooldownTimer,
+		[this]()
+		{
+			bCanFire = true;
+		},
+		FireRate,
+		false
+	);
+	
 	if (Player->MoveComp->bCanRun && !isMoving)
 	{
 		Anim->isAttack = true;
@@ -69,6 +82,7 @@ void UPlayerCombatComponent::Fire()
 		);
 		if (MagazineAmmo > 0)
 		{
+			UGameplayStatics::PlaySound2D(GetWorld(),FireSound);
 			MakeBullet();
 			MagazineAmmo--;
 		}
@@ -76,7 +90,16 @@ void UPlayerCombatComponent::Fire()
 		{
 			if (ReserveAmmo > 0)
 			{
+				if (!IsReloading)
+				{
+					UGameplayStatics::PlaySound2D(GetWorld(),ReloadSound);
+				}
+				IsReloading = true;
 				Anim->isReloading = true;
+			}
+			else
+			{
+				UGameplayStatics::PlaySound2D(GetWorld(),EmptySound);
 			}
 		}
 	}
@@ -126,4 +149,7 @@ void UPlayerCombatComponent::ReloadGun()
 		
 	MagazineAmmo += AmmoToReload;
 	ReserveAmmo -= AmmoToReload;
+	IsReloading = false;
 }
+
+

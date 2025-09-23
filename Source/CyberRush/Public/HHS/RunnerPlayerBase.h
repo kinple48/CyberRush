@@ -53,4 +53,13 @@ public:
 
 	UPROPERTY(EditAnywhere,BlueprintReadWrite)
 	int32 CurrentCoin = 0;
+
+	UPROPERTY(EditAnywhere,BlueprintReadWrite)
+	class USoundBase* DeathSound;
+
+	UPROPERTY(EditAnywhere,BlueprintReadWrite)
+	class USoundBase* footstep1Sound;
+
+	UPROPERTY(EditAnywhere,BlueprintReadWrite)
+	class USoundBase* footstep2Sound;
 };

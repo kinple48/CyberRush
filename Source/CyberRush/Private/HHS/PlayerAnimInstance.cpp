@@ -7,6 +7,7 @@
 #include "HHS/PlayerCombatComponent.h"
 #include "HHS/PlayerMoveComponent.h"
 #include "HHS/RunnerPlayerBase.h"
+#include "Kismet/GameplayStatics.h"
 
 void UPlayerAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 {
@@ -73,4 +74,24 @@ void UPlayerAnimInstance::AnimNotify_Move_R_End()
 		return;
 	}
 	player->CombatComp->isMoving = false;
+}
+
+void UPlayerAnimInstance::AnimNotify_footstep1()
+{
+	ARunnerPlayerBase* player = Cast<ARunnerPlayerBase>(TryGetPawnOwner());
+	if( player == nullptr )
+	{
+		return;
+	}
+	UGameplayStatics::PlaySound2D(GetWorld(),player->footstep1Sound);
+}
+
+void UPlayerAnimInstance::AnimNotify_footstep2()
+{
+	ARunnerPlayerBase* player = Cast<ARunnerPlayerBase>(TryGetPawnOwner());
+	if( player == nullptr )
+	{
+		return;
+	}
+	UGameplayStatics::PlaySound2D(GetWorld(),player->footstep2Sound);
 }

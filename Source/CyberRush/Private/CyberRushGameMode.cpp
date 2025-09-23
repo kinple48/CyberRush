@@ -121,7 +121,6 @@ void ACyberRushGameMode::PlayerDied(AController* PlayerController)
 void ACyberRushGameMode::RestartGameState()
 {
 	CurrentScore = 0;
-
 	// Destroy FloorTile
 	for (TActorIterator<AFloorTile> It(GetWorld()); It; ++It)
 	{
@@ -157,13 +156,11 @@ void ACyberRushGameMode::RestartGameState()
 	APlayerController* PC = UGameplayStatics::GetPlayerController(this, 0);
 	if (PC)
 	{
-		// ���� Pawn ����
 		if (APawn* OldPawn = PC->GetPawn())
 		{
 			OldPawn->Destroy();
 		}
 
-		// ���� ��ġ ����
 		FVector SpawnLocation(300.f, 0.f, 0.f);
 		FRotator SpawnRotation = FRotator::ZeroRotator;
 
@@ -172,7 +169,6 @@ void ACyberRushGameMode::RestartGameState()
 		SpawnParams.Instigator = PC->GetPawn();
 		SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
 
-		// Pawn ���� �� Possess
 		APawn* NewPawn = GetWorld()->SpawnActor<APawn>(DefaultPawnClass, SpawnLocation, SpawnRotation, SpawnParams);
 		if (NewPawn)
 		{
@@ -189,6 +185,7 @@ void ACyberRushGameMode::RestartGameState()
 		3.0f,
 		false
 	);
+	
 }
 
 void ACyberRushGameMode::EnableRunning()

@@ -45,6 +45,7 @@ void UBeastEnemyFSM::TickComponent(float DeltaTime, ELevelTick TickType, FActorC
 
 void UBeastEnemyFSM::IdleState()
 {
+	if (target->bIsDead) return;
 	CurrentTime += GetWorld()->DeltaTimeSeconds;
 	if (CurrentTime >= IdleDelayTime)
 	{
@@ -57,7 +58,12 @@ void UBeastEnemyFSM::IdleState()
 void UBeastEnemyFSM::MoveState()
 {
 	if (!target || !me) return;
-
+	if (target->bIsDead)
+	{
+		mstate = EEnemyState::Idle;
+		Anim->AnimState = mstate;
+	}
+	
 	FVector destination = target->GetActorLocation();
 	FVector dir = destination - me->GetActorLocation();
 
@@ -89,6 +95,7 @@ void UBeastEnemyFSM::OnDamageProcess(int32 damage)
 		mstate = EEnemyState::Damage;
 		int32 randValue = FMath::RandRange(0, 1);
 		FString sectionName = FString::Printf(TEXT("Damage%d"),randValue);
+		UGameplayStatics::PlaySound2D(GetWorld(),HitSound);
 		me->PlayAnimMontage(Anim->EnemyMontage,1.f,FName(*sectionName));
 	}
 	else
@@ -97,6 +104,8 @@ void UBeastEnemyFSM::OnDamageProcess(int32 damage)
 		me->GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 		me->CollisionRange->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 		me->PlayAnimMontage(Anim->EnemyMontage, 1.f,TEXT("Die"));
+		UGameplayStatics::PlaySound2D(GetWorld(), me->ExplosionSound);
+		UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), me->ExplosionVFX ,me->GetActorLocation());
 		const float DropChance = 0.3f; // 30%
 		if (FMath::FRand() <= DropChance && MagazineFactory)
 		{
