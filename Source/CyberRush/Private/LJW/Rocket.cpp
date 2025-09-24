@@ -1,6 +1,3 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
-
 #include "LJW/Rocket.h"
 
 #include "Components/BoxComponent.h"
@@ -11,7 +8,6 @@
 #include "Kismet/GameplayStatics.h"
 #include "LJW/FloorTile.h"
 
-// Sets default values
 ARocket::ARocket()
 {
 	PrimaryActorTick.bCanEverTick = true;
@@ -32,7 +28,7 @@ void ARocket::BeginPlay()
 	   AutoDestroyHandle,
 	   this,
 	   &ARocket::SelfDestruct,
-	   0.55f,
+	   0.5f,
 	   false
    );
 }
@@ -46,7 +42,7 @@ void ARocket::Tick(float DeltaTime)
 		FVector NewLocation = GetActorLocation() + MoveDirection * Speed * DeltaTime;
 		SetActorLocation(NewLocation);
 		FRotator FireRotation = MoveDirection.Rotation();
-		FireRotation.Pitch -= 0.3f;
+		FireRotation.Pitch -= 0.35f;
 		MoveDirection = FireRotation.Vector();
 	}
 }
@@ -60,7 +56,6 @@ void ARocket::OnOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherA
 		UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), ExplosionVFX, GetActorLocation());
 		Destroy();
 	}
-	
 }
 
 void ARocket::Init(FVector InDirection)
