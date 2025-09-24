@@ -64,8 +64,8 @@ void UBeastEnemyFSM::MoveState()
 		Anim->AnimState = mstate;
 	}
 	
-	FVector destination = target->GetActorLocation();
-	FVector dir = destination - me->GetActorLocation();
+	
+	FVector dir = me->GetActorForwardVector();
 
 	FVector currentVelocity = me->GetCharacterMovement()->Velocity;
 	me -> AddMovementInput(dir);

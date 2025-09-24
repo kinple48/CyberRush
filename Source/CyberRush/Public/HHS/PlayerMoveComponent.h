@@ -1,5 +1,3 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
 #pragma once
 
 #include "CoreMinimal.h"
@@ -23,9 +21,8 @@ protected:
 public:	
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
-	// ========== 레인 이동 ==========
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Runner|Movement")
-	int32 CurrentLane = 1; // 0: Left, 1: Center, 2: Right
+	int32 CurrentLane = 1;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Runner|Movement")
 	float LaneDistance = 250.f;

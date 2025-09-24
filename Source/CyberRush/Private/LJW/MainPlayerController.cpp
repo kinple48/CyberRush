@@ -1,8 +1,6 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
-
 #include "LJW/MainPlayerController.h"
 
+#include "HHS/PlayerCombatComponent.h"
 #include "HHS/PlayerMoveComponent.h"
 #include "HHS/RunnerPlayerBase.h"
 
@@ -17,7 +15,7 @@ void AMainPlayerController::SetupInputComponent()
 void AMainPlayerController::BeginPlay()
 {
 	Super::BeginPlay();
-	bShowMouseCursor = true; // UI 사용할 거면 마우스 커서 보이게
+	bShowMouseCursor = true;
 
 	FInputModeGameAndUI InputMode;
 	SetInputMode(InputMode);
@@ -29,31 +27,82 @@ void AMainPlayerController::OnTouchBegin(ETouchIndex::Type FingerIndex, FVector 
 	TouchStartTime = GetWorld()->GetTimeSeconds();
 }
 
+/*
 void AMainPlayerController::OnTouchEnd(ETouchIndex::Type FingerIndex, FVector Location)
 {
 	const FVector2D TouchEnd(Location.X, Location.Y);
 	const float DeltaX = TouchEnd.X - TouchStart.X;
+	const float DeltaY = TouchStart.Y - TouchEnd.Y; // ↑ 방향이 양수
 	const float DeltaTime = GetWorld()->GetTimeSeconds() - TouchStartTime;
 
-	ARunnerPlayerBase* player = Cast<ARunnerPlayerBase>(GetPawn());
-	if (!Player) return;
+	ARunnerPlayerBase* me = Cast<ARunnerPlayerBase>(GetPawn());
+	if (!me) return;
 
-	UPlayerMoveComponent* MoveComp = player->FindComponentByClass<UPlayerMoveComponent>();
+	UPlayerMoveComponent* MoveComp = me->FindComponentByClass<UPlayerMoveComponent>();
 	if (!MoveComp) return;
 
-	// 스와이프 판별
-	if (FMath::Abs(DeltaX) >= MinSwipeDistance)
+	// 주 방향 결정
+	if (FMath::Abs(DeltaX) > FMath::Abs(DeltaY))
 	{
-		if (DeltaX > 0)
-			MoveComp->MoveRight();
-		else
-			MoveComp->MoveLeft();
+		// 좌우 스와이프
+		if (FMath::Abs(DeltaX) >= MinSwipeDistance)
+		{
+			if (DeltaX > 0)
+				MoveComp->MoveRight();
+			else
+				MoveComp->MoveLeft();
+		}
 	}
-	// 탭 (짧고 거의 안 움직인 터치) → 점프
-	else if (DeltaTime <= MaxTapDuration)
+	else
 	{
-		MoveComp->Jump();
+		if (DeltaY >= MinSwipeDistance)
+		{
+			MoveComp->Jump();
+		}
 	}
 }
+*/
 
+void AMainPlayerController::OnTouchEnd(ETouchIndex::Type FingerIndex, FVector Location)
+{
+	const FVector2D TouchEnd(Location.X, Location.Y);
+	const float DeltaX = TouchEnd.X - TouchStart.X;
+	const float DeltaY = TouchStart.Y - TouchEnd.Y; // ↑ 방향이 양수
+	const float DeltaTime = GetWorld()->GetTimeSeconds() - TouchStartTime;
 
+	ARunnerPlayerBase* me = Cast<ARunnerPlayerBase>(GetPawn());
+	if (!me) return;
+
+	UPlayerMoveComponent* MoveComp = me->FindComponentByClass<UPlayerMoveComponent>();
+	UPlayerCombatComponent* CombatComp = me->FindComponentByClass<UPlayerCombatComponent>();
+
+	if (!MoveComp || !CombatComp) return;
+
+	// 1. 주 방향 판별
+	if (FMath::Abs(DeltaX) > FMath::Abs(DeltaY))
+	{
+		if (FMath::Abs(DeltaX) >= MinSwipeDistance)
+		{
+			if (DeltaX > 0)
+				MoveComp->MoveRight();
+			else
+				MoveComp->MoveLeft();
+			return;
+		}
+	}
+	else
+	{
+		if (DeltaY >= MinSwipeDistance)
+		{
+			MoveComp->Jump();
+			return;
+		}
+	}
+
+	// 2. 스와이프도 아니고, 짧은 탭이면 Fire 실행
+	if (DeltaTime <= MaxTapDuration &&
+		FVector2D::Distance(TouchStart, TouchEnd) < MinSwipeDistance)
+	{
+		CombatComp->Fire();
+	}
+}

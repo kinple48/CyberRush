@@ -25,4 +25,6 @@ protected:
 
 	const float MinSwipeDistance = 50.f;
 	const float MaxTapDuration = 0.25f;
+
+	
 };
