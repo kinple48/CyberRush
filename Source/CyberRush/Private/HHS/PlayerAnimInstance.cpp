@@ -24,18 +24,6 @@ void UPlayerAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 	isRun = player->MoveComp->bCanRun;
 }
 
-void UPlayerAnimInstance::AnimNotify_Reload()
-{
-	ARunnerPlayerBase* player = Cast<ARunnerPlayerBase>(TryGetPawnOwner());
-	if( player == nullptr )
-	{
-		return;
-	}
-	
-	isReloading = false;
-	player->CombatComp->ReloadGun();
-}
-
 void UPlayerAnimInstance::AnimNotify_Move_L_Start()
 {
 	ARunnerPlayerBase* player = Cast<ARunnerPlayerBase>(TryGetPawnOwner());

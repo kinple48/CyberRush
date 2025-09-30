@@ -39,5 +39,12 @@ public:
 	
 	void SpawnEnemy();
 
+	AEnemyBase* enemy1;
+	AEnemyBase* enemy2;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	int32 lane1 = 0;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	int32 lane2 = 1;
 };

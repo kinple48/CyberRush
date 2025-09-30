@@ -2,9 +2,11 @@
 
 #include "Components/CapsuleComponent.h"
 #include "Components/DecalComponent.h"
+#include "Components/SphereComponent.h"
 #include "HHS/RunnerPlayerBase.h"
 #include "Kismet/GameplayStatics.h"
 #include "LJW/DroneEnemy.h"
+#include "LJW/DroneEnemyAnim.h"
 #include "LJW/Rocket.h"
 
 UDroneEnemyFSM::UDroneEnemyFSM()
@@ -23,14 +25,15 @@ void UDroneEnemyFSM::BeginPlay()
 	}
 	
 	Me = Cast<ADroneEnemy>(GetOwner());
+	if (Me)
+	{
+		Anim = Cast<UDroneEnemyAnim>(Me->GetMesh()->GetAnimInstance());
+	}
 }
 
 void UDroneEnemyFSM::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
-
-	FString logMsg = UEnum::GetValueAsString(mstate);
-	GEngine->AddOnScreenDebugMessage(0, 1.f, FColor::Red, logMsg);
 	
 	switch (mstate)
 	{
@@ -65,6 +68,7 @@ void UDroneEnemyFSM::IdleState()
 	if (FMath::IsNearlyEqual(NewLoc.Z, 370.f, 1.0f))
 	{
 		mstate = EDroneState::Move;
+		Anim->AnimState = mstate;
 	}
 }
 
@@ -84,6 +88,16 @@ void UDroneEnemyFSM::MoveState()
 	FVector NewLoc = FMath::VInterpTo(CurrentLoc, TargetLoc, GetWorld()->GetDeltaSeconds(), 2.0f);
 
 	Me->SetActorLocation(NewLoc);
+
+	const float Epsilon = 0.01f; 
+	if (NewLoc.Y > CurrentLoc.Y + Epsilon)
+	{
+		Anim->moveright = true;
+	}
+	else if (NewLoc.Y < CurrentLoc.Y - Epsilon)
+	{
+		Anim->moveright = false;
+	}
 	
 	ElapsedTimeInMove += GetWorld()->GetDeltaSeconds();
 
@@ -92,6 +106,7 @@ void UDroneEnemyFSM::MoveState()
 		AttackLocY = GetNearestLaneY(PlayerLoc.Y);
 		bHasFiredRocket =true;
 		mstate = EDroneState::Attack;
+		Anim->AnimState = mstate;
 		ElapsedTimeInMove = 0.0f;
 	}
 }
@@ -110,7 +125,7 @@ void UDroneEnemyFSM::AttackState()
 	FVector TargetLoc(TargetX, AttackLocY, TargetZ);
 	FVector NewLoc = FMath::VInterpTo(CurrentLoc, TargetLoc, GetWorld()->GetDeltaSeconds(), 2.0f);
 	Me->SetActorLocation(NewLoc);
-	
+	Me->ReticleDecal->SetDecalMaterial(Me->ReticleMaterial2);
 	ElapsedAttackTime += GetWorld()->GetDeltaSeconds();
 
 	if (bHasFiredRocket && ElapsedAttackTime >= 0.5f)
@@ -140,26 +155,49 @@ void UDroneEnemyFSM::AttackState()
 	if (ElapsedAttackTime >= 1.5f)
 	{
 		mstate = EDroneState::Move;
+		Anim->AnimState = mstate;
+		Me->ReticleDecal->SetDecalMaterial(Me->ReticleMaterial1);
 		ElapsedAttackTime = 0.0f;
 	}
 }
 
 void UDroneEnemyFSM::DieState()
 {
-	Me->Destroy();
+	if (!Me) return;
+
+	FVector CurrentLocation = Me->GetActorLocation();
+	FVector TargetLocation = FVector(CurrentLocation.X, CurrentLocation.Y, 220.0f);
+
+	const float FallSpeed = 3.f;
+
+	FVector NewLocation = FMath::VInterpTo(
+		CurrentLocation, 
+		TargetLocation, 
+		GetWorld()->GetDeltaSeconds(), 
+		FallSpeed
+	);
+
+	Me->SetActorLocation(NewLocation);
 }
 
 void UDroneEnemyFSM::OnDamageProcess(int32 damage)
 {
-	if (hp <= 0)
+	hp -= damage;
+	if (hp > 0)
 	{
-		mstate = EDroneState::Die;
+		UGameplayStatics::PlaySound2D(GetWorld(),HitSound);
+		Me->PlayAnimMontage(Anim->EnemyMontage,1.f,TEXT("Damage"));
 	}
+	
 	else
 	{
-		hp -= damage;
 		UGameplayStatics::PlaySound2D(GetWorld(),HitSound);
+		Anim->AnimState = EDroneState::Die;
+		mstate = EDroneState::Die;
+		Me->GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+		Me->CollisionRange->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	}
+	
 }
 
 void UDroneEnemyFSM::SetReticleVisible(bool bVisible)

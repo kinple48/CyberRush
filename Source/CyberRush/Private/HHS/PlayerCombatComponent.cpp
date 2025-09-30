@@ -45,9 +45,6 @@ void UPlayerCombatComponent::BeginPlay()
 		bullet->SetActive(false);
 		Magazine.Add(bullet);
 	}
-
-	MagazineAmmo = maxMagazineAmmo;
-	ReserveAmmo = maxReserveAmmo;
 }
 
 void UPlayerCombatComponent::SetupInputBinding(UEnhancedInputComponent* InputComponent)
@@ -57,7 +54,7 @@ void UPlayerCombatComponent::SetupInputBinding(UEnhancedInputComponent* InputCom
 
 void UPlayerCombatComponent::Fire()
 {
-	if (!bCanFire || Player->bIsDead || IsReloading) return;
+	if (!bCanFire || Player->bIsDead) return;
 	bCanFire = false;
 	GetWorld()->GetTimerManager().SetTimer(
 		FireCooldownTimer,
@@ -80,28 +77,9 @@ void UPlayerCombatComponent::Fire()
 			AttackResetTime,
 			false
 		);
-		if (MagazineAmmo > 0)
-		{
-			UGameplayStatics::PlaySound2D(GetWorld(),FireSound);
-			MakeBullet();
-			MagazineAmmo--;
-		}
-		else
-		{
-			if (ReserveAmmo > 0)
-			{
-				if (!IsReloading)
-				{
-					UGameplayStatics::PlaySound2D(GetWorld(),ReloadSound);
-				}
-				IsReloading = true;
-				Anim->isReloading = true;
-			}
-			else
-			{
-				UGameplayStatics::PlaySound2D(GetWorld(),EmptySound);
-			}
-		}
+		
+		UGameplayStatics::PlaySound2D(GetWorld(),FireSound);
+		MakeBullet();
 	}
 }
 
@@ -133,23 +111,6 @@ void UPlayerCombatComponent::ResetAttack()
 	{
 		Anim->isAttack = false;
 	}
-}
-
-void UPlayerCombatComponent::ReloadGun()
-{
-	int32 AmmoNeeded = maxMagazineAmmo - MagazineAmmo;
-
-	int32 AmmoToReload = FMath::Min(AmmoNeeded, ReserveAmmo);
-
-		
-	if (AmmoNeeded <= 0 || ReserveAmmo <= 0 || AmmoToReload <= 0)
-	{
-		return;
-	}
-		
-	MagazineAmmo += AmmoToReload;
-	ReserveAmmo -= AmmoToReload;
-	IsReloading = false;
 }
 
 

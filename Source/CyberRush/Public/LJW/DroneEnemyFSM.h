@@ -48,7 +48,7 @@ public:
 	void OnDamageProcess(int32 damage);
 	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = FSM)
-	int32 hp = 4;
+	int32 hp = 2;
 	
 	float AttackDelayTime = 2.0f;
 	float ElapsedTimeInMove = 0.0f;
@@ -66,4 +66,8 @@ public:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Sound")
 	class USoundBase* HitSound;
+
+	UPROPERTY()
+	class UDroneEnemyAnim* Anim;
+
 };

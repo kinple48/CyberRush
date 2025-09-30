@@ -53,6 +53,11 @@ void ABeastEnemy::OnItemEndOverlap(UPrimitiveComponent* OverlappedComponent, AAc
 {
 	if (auto Floor = Cast<AFloorTile>(OtherActor))
 	{
-		Destroy();
+		//Destroy();
 	}
+}
+
+void ABeastEnemy::setstartlane(int32 lane)
+{
+	lanenumber = lane;
 }

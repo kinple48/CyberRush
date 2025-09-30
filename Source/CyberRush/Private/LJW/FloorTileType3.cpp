@@ -6,6 +6,7 @@
 #include "Components/ArrowComponent.h"
 #include "Components/BoxComponent.h"
 #include "HHS/RunnerPlayerBase.h"
+#include "LJW/BeastEnemy.h"
 #include "LJW/EnemyBase.h"
 
 AFloorTileType3::AFloorTileType3()
@@ -43,8 +44,20 @@ void AFloorTileType3::OnSensorBeginOverlap(UPrimitiveComponent* OverlappedCompon
 
 void AFloorTileType3::SpawnEnemy()
 {
+	TArray<int32> LaneNumbers;
+	LaneNumbers.Add(0);
+	LaneNumbers.Add(1);
+	LaneNumbers.Add(2);
+
+	for (int32 i = LaneNumbers.Num() - 1; i > 0; i--)
+	{
+		int32 j = FMath::RandRange(0, i);
+		LaneNumbers.Swap(i, j);
+	}
 	FActorSpawnParameters SpawnParams;
 	SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
-	GetWorld()->SpawnActor<AEnemyBase>(EnemyFactory, EnemySponPoint1->GetComponentTransform(), SpawnParams);
-	GetWorld()->SpawnActor<AEnemyBase>(EnemyFactory, EnemySponPoint2->GetComponentTransform(), SpawnParams);
+	enemy1 = GetWorld()->SpawnActor<ABeastEnemy>(EnemyFactory, EnemySponPoint1->GetComponentTransform(), SpawnParams);
+	Cast<ABeastEnemy>(enemy1)->setstartlane(lane1);
+	enemy2 = GetWorld()->SpawnActor<ABeastEnemy>(EnemyFactory, EnemySponPoint2->GetComponentTransform(), SpawnParams);
+	Cast<ABeastEnemy>(enemy2)->setstartlane(lane2);
 }

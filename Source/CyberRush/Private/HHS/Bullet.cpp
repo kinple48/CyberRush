@@ -91,7 +91,7 @@ void ABullet::SetActive(bool bValue)
 	if (bValue && GetWorld())
 	{
 		GetWorld()->GetTimerManager().SetTimer(
-			BulletLifeTimer, this, &ABullet::Deactivate, 1.5f, false);
+			BulletLifeTimer, this, &ABullet::Deactivate, 0.8f, false);
 	}
 	else if (GetWorld())
 	{

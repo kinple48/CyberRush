@@ -74,9 +74,9 @@ void AItem::OnItemBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor*
 
 void AItem::OnItemEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
 {
-	if (auto Floor = Cast<AFloorTile>(OtherActor))
-	{
-		Destroy();
-	}
+	//if (auto Floor = Cast<AFloorTile>(OtherActor))
+	//{
+	//	Destroy();
+	//}
 }
 

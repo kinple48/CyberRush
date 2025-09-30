@@ -51,5 +51,5 @@ void AFloorTileType4::SpawnEnemy()
 	}
 	FActorSpawnParameters SpawnParams;
 	SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
-	GetWorld()->SpawnActor<AEnemyBase>(EnemyFactory, EnemySponPoint->GetComponentTransform(), SpawnParams);
+	GetWorld()->SpawnActor<ADroneEnemy>(EnemyFactory, EnemySponPoint->GetComponentTransform(), SpawnParams);
 }

@@ -7,7 +7,6 @@
 #include "LJW/BeastEnemy.h"
 #include "LJW/BeastEnemyAnim.h"
 #include "Components/SphereComponent.h"
-#include "LJW/Magazine.h"
 
 UBeastEnemyFSM::UBeastEnemyFSM()
 {
@@ -33,13 +32,17 @@ void UBeastEnemyFSM::BeginPlay()
 void UBeastEnemyFSM::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
-	
+	FString logMsg = UEnum::GetValueAsString(mstate);
+	//GEngine->AddOnScreenDebugMessage(0, 1.f, FColor::Red, logMsg);
 	switch (mstate)
 	{
 		case EEnemyState::Idle: {IdleState();} break;
 		case EEnemyState::Move: {MoveState();} break;
 		case EEnemyState::Damage: {DamageState();} break;
 		case EEnemyState::Die: {DieState();} break;
+		case EEnemyState::MoveToLane: {MoveToLane();} break;
+		case EEnemyState::Rotate: {RotateState();} break;
+		
 	}
 }
 
@@ -49,9 +52,13 @@ void UBeastEnemyFSM::IdleState()
 	CurrentTime += GetWorld()->DeltaTimeSeconds;
 	if (CurrentTime >= IdleDelayTime)
 	{
-		mstate = EEnemyState::Move;
+		mstate = EEnemyState::MoveToLane;
+		if (me)
+		{
+			StartingY = me->GetActorLocation().Y;
+		}
 		CurrentTime = 0;
-		Anim->AnimState = mstate;
+		Anim->AnimState = EEnemyState::Move;
 	}
 }
 
@@ -87,6 +94,76 @@ void UBeastEnemyFSM::DieState()
 	if (!bDieDone) return;
 }
 
+void UBeastEnemyFSM::MoveToLane()
+{
+	if (!me) return;
+
+	float TargetY = 0.0f;
+	switch (me->lanenumber)
+	{
+	case 0: TargetY = -250.0f; break;
+	case 1: TargetY = 0.0f; break;
+	case 2: TargetY = 250.0f; break;
+	default: TargetY = me->GetActorLocation().Y; break;
+	}
+
+	FVector CurrentLocation = me->GetActorLocation();
+	FVector TargetLocation = FVector(CurrentLocation.X, TargetY, CurrentLocation.Z);
+
+	if (FVector::Dist2D(CurrentLocation, TargetLocation) < 5.0f)
+	{
+		me->SetActorLocation(FVector(CurrentLocation.X, TargetY, CurrentLocation.Z));
+
+		mstate = EEnemyState::Rotate;
+		if (Anim)
+		{
+			Anim->AnimState = mstate;
+		}
+		return;
+	}
+	
+	FVector Dir = (TargetLocation - CurrentLocation).GetSafeNormal();
+
+	me->AddMovementInput(Dir);
+}
+
+void UBeastEnemyFSM::RotateState()
+{
+	if (!me) return;
+
+	if (StartingY > 0.0f)
+	{
+		TargetYaw = -180.0f;
+		
+	}
+	else if (StartingY < 0.0f)
+	{
+		TargetYaw = 180.0f;
+	}
+	else
+	{
+		TargetYaw = me->GetActorRotation().Yaw;
+	}
+
+	FRotator CurrentRotation = me->GetActorRotation();
+	FRotator TargetRotation = FRotator(0.0f, TargetYaw, 0.0f);
+
+	if (FMath::IsNearlyEqual(CurrentRotation.Yaw, TargetYaw, 1.0f))
+	{
+		mstate = EEnemyState::Move;
+		if (Anim) Anim->AnimState = mstate;
+		return;
+	}
+
+	FRotator NewRotation = FMath::RInterpTo(
+		CurrentRotation,
+		TargetRotation,
+		GetWorld()->GetDeltaSeconds(),
+		5.0f
+	);
+	me->SetActorRotation(NewRotation);
+}
+
 void UBeastEnemyFSM::OnDamageProcess(int32 damage)
 {
 	hp -= damage;
@@ -106,17 +183,6 @@ void UBeastEnemyFSM::OnDamageProcess(int32 damage)
 		me->PlayAnimMontage(Anim->EnemyMontage, 1.f,TEXT("Die"));
 		UGameplayStatics::PlaySound2D(GetWorld(), me->ExplosionSound);
 		UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), me->ExplosionVFX ,me->GetActorLocation());
-		const float DropChance = 0.3f; // 30%
-		if (FMath::FRand() <= DropChance && MagazineFactory)
-		{
-			FVector SpawnLocation = me->GetActorLocation();
-			FRotator SpawnRotation = FRotator::ZeroRotator;
-			FActorSpawnParameters SpawnParams;
-			SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
-
-			GetWorld()->SpawnActor<AMagazine>(MagazineFactory, SpawnLocation, SpawnRotation, SpawnParams);
-		}
-		
 	}
 	Anim->AnimState = mstate;
 }

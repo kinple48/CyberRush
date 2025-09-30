@@ -34,13 +34,7 @@ public:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category=PlayerAnim)
 	bool isAttack = false;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category=PlayerAnim)
-	bool isReloading = false;
-
-	UFUNCTION()
-	void AnimNotify_Reload();
-
+	
 	UFUNCTION()
 	void AnimNotify_Move_L_Start();
 

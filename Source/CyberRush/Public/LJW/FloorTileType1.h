@@ -18,19 +18,10 @@ protected:
 	
 public:
 	UPROPERTY(EditAnywhere, Category = "Spawning")
-	TSubclassOf<class AMagazine> MagazineFactory;
-
-	UPROPERTY(EditAnywhere, Category = "Spawning")
 	TSubclassOf<class AItem> ItemFactory;
 	
 	UPROPERTY(EditAnywhere, Category = "Spawning")
 	TArray<float> LaneYPositions = { -250.f, 0.f, 250.f };
-
-	UPROPERTY(EditAnywhere, Category = "Spawning")
-	int32 ItemCount = 4;
-	
-	UPROPERTY(EditAnywhere, Category = "Spawning")
-	float ItemSpacing = 100.f;
 	
 	UFUNCTION(BlueprintCallable)
 	void SpawnItemLine();

@@ -71,14 +71,6 @@ void ACyberRushGameMode::AddFloorTile()
 	if (FloorTile)
 	{
 		NextSpawnPoint = FloorTile->GetAttachTransform();
-		if (AFloorTileType1* TileType1 = Cast<AFloorTileType1>(FloorTile))
-		{
-			TileType1->SpawnItemLine();
-		}
-		else if (AFloorTileType2* TileType2 = Cast<AFloorTileType2>(FloorTile))
-		{
-			TileType2->SpawnObjectLine();
-		}
 	}
 }
 

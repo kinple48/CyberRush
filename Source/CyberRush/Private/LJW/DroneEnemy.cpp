@@ -20,8 +20,8 @@ ADroneEnemy::ADroneEnemy()
 void ADroneEnemy::BeginPlay()
 {
 	Super::BeginPlay();
-	if (ReticleMaterial)
+	if (ReticleMaterial1)
 	{
-		ReticleDecal->SetDecalMaterial(ReticleMaterial);
+		ReticleDecal->SetDecalMaterial(ReticleMaterial1);
 	}
 }

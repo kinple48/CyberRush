@@ -37,4 +37,8 @@ public:
 
 	UPROPERTY(EditAnywhere, Category = "Effect")
 	class UParticleSystem* ExplosionVFX;
+
+	void setstartlane(int32 lanenumber);
+
+	int32 lanenumber;
 };

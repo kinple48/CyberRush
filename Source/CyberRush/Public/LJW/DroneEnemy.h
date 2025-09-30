@@ -25,8 +25,17 @@ public:
 	UDecalComponent* ReticleDecal;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Reticle")
-	UMaterialInterface* ReticleMaterial;
+	UMaterialInterface* ReticleMaterial1;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Reticle")
+	UMaterialInterface* ReticleMaterial2;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Sound")
 	class USoundBase* FireSound;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Sound")
+	class USoundBase* ExplosionSound;
+
+	UPROPERTY(EditAnywhere, Category = "Effect")
+	class UParticleSystem* ExplosionVFX;
 };

@@ -9,7 +9,9 @@ enum class EEnemyState : uint8
 	Idle,
 	Move,
 	Damage,
-	Die
+	MoveToLane,
+	Die,
+	Rotate
 };
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
@@ -33,6 +35,8 @@ public:
 	void MoveState();
 	void DamageState();
 	void DieState();
+	void MoveToLane();
+	void RotateState();
 
 	float IdleDelayTime = 0.5f;
 	float CurrentTime = 0.f;
@@ -47,7 +51,7 @@ public:
 	void OnDamageProcess(int32 damage);
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = FSM)
-	int32 hp = 2;
+	int32 hp = 1;
 
 	UPROPERTY()
 	class UBeastEnemyAnim* Anim;
@@ -58,9 +62,11 @@ public:
 	{
 		bDieDone = true;
 	}
-
-	UPROPERTY(EditAnywhere, Category = "Spawning") TSubclassOf<class AMagazine> MagazineFactory;
-
+	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Sound")
 	class USoundBase* HitSound;
+
+	float TargetYaw;
+
+	float StartingY;
 };

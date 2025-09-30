@@ -53,35 +53,11 @@ public:
 	float AttackResetTime = 3.0f;
 	void ResetAttack();
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Combat")
-	int32 MagazineAmmo;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Combat")
-	int32 maxMagazineAmmo = 8;
-	
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Combat")
-	int32 ReserveAmmo;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Combat")
-	int32 maxReserveAmmo = 32;
-
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Combat")
 	bool isMoving = false;
 
-	UFUNCTION(BlueprintCallable)
-	void ReloadGun();
-
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Sound")
 	class USoundBase* FireSound;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Sound")
-	class USoundBase* EmptySound;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Sound")
-	class USoundBase* ReloadSound;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Combat")
-	bool IsReloading = false;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Combat")
 	float FireRate = 0.3f;
